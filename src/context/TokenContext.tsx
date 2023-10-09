@@ -20,9 +20,9 @@ interface Token {
   tags: string[];
 }
 
-interface TokenPrice{
+interface TokenPrice {
   address: string;
-  price: string;
+  price: any;
 }
 
 interface TokenContextProps {
@@ -31,6 +31,13 @@ interface TokenContextProps {
   buyingToken: Token | null;
   setBuyingToken: Dispatch<SetStateAction<Token | null>>;
   tokens: Token[];
+  sellingTokenPrice: TokenPrice | null;
+  buyingTokenPrice: TokenPrice | null;
+
+  sellingTokenAmount: number;
+  setSellingTokenAmount: Dispatch<SetStateAction<number>>;
+
+  buyingTokenAmount:number|null;
 }
 
 const TokenContext = createContext<TokenContextProps | undefined>(undefined);
@@ -38,13 +45,19 @@ const TokenContext = createContext<TokenContextProps | undefined>(undefined);
 export const TokenProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [sellingToken, setSellingToken] = useState<Token | null>(
-    null
-  );
+  const [sellingToken, setSellingToken] = useState<Token | null>(null);
   const [buyingToken, setBuyingToken] = useState<Token | null>(null);
   const [tokens, setTokens] = useState<Token[]>([]);
-  const [sellingTokenPrice, setSellingTokenPrice] = useState<TokenPrice|null>(null);
-  
+  const [sellingTokenPrice, setSellingTokenPrice] = useState<TokenPrice | null>(
+    null
+  );
+
+  const [buyingTokenPrice,setBuyingTokenPrice]=useState<TokenPrice|null>(null)
+
+const [sellingTokenAmount,setSellingTokenAmount]=useState<number>(0)
+const [buyingTokenAmount, setBuyingTokenAmount] = useState<number>(0);
+
+
   useEffect(() => {
     const fetchTokens = async () => {
       try {
@@ -63,32 +76,67 @@ export const TokenProvider: React.FC<{ children: ReactNode }> = ({
     };
 
     fetchTokens();
-  }, []); 
-
+  }, []);
 
   useEffect(() => {
     const fetchToken = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/api/v1/tokens/{sellingToken?.address}`
+          Route.fetchTokenPrice + sellingToken?.address
         );
-        // const tokenData = response.data.data.tokens;
-        // const tokenArray: Token[] = [];
-        // for (const key in tokenData) {
-        //   if (tokenData.hasOwnProperty(key)) {
-        //     tokenArray.push(tokenData[key]);
-        //   }
-        // }
-        console.log("price is",response)
-        // setTokens(tokenArray);
-        setSellingTokenPrice(response.data)
+
+        // Extract key and value from the response object
+        const [address, price] = Object.entries(response.data.data)[0];
+
+        // Create a new TokenPrice object
+        const tokenPrice: TokenPrice = {
+          address: address,
+          price: price,
+        };
+
+        // Set the state with the new TokenPrice object
+        setSellingTokenPrice(tokenPrice);
+
+        console.log("saved", tokenPrice.price);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
 
-    fetchToken();
-  },[sellingToken])
+    if (sellingToken !== null) {
+      fetchToken();
+    }
+  }, [sellingToken]);
+
+  useEffect(() => {
+    const fetchToken = async () => {
+      try {
+        const response = await axios.get(
+          Route.fetchTokenPrice + buyingToken?.address
+        );
+
+        // Extract key and value from the response object
+        const [address, price] = Object.entries(response.data.data)[0];
+
+        // Create a new TokenPrice object
+        const tokenPrice: TokenPrice = {
+          address: address,
+          price: price,
+        };
+
+        // Set the state with the new TokenPrice object
+        setBuyingTokenPrice(tokenPrice);
+
+        console.log("saved", tokenPrice.price);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    if (buyingToken !== null) {
+      fetchToken();
+    }
+  }, [buyingToken]);
 
   return (
     <TokenContext.Provider
@@ -97,7 +145,12 @@ export const TokenProvider: React.FC<{ children: ReactNode }> = ({
         setSellingToken,
         buyingToken,
         setBuyingToken,
-        tokens
+        tokens,
+        sellingTokenPrice,
+        buyingTokenPrice,
+        sellingTokenAmount,
+        setSellingTokenAmount,
+        buyingTokenAmount
       }}
     >
       {children}

@@ -14,6 +14,7 @@ import { IoMdRefresh } from "react-icons/io";
 import ethLogo from "../assets/eth.png";
 import Link from "next/link";
 import { useTokenContext } from "@/context/TokenContext";
+import { useEffect } from "react";
 
 const style = {
   wrapper: `w-screen flex items-center justify-center mt-14`,
@@ -30,7 +31,18 @@ const style = {
 };
 
 export default function Swap() {
-  const { tokens, sellingToken, buyingToken } = useTokenContext();
+  const {
+    tokens,
+    sellingToken,
+    buyingToken,
+    sellingTokenPrice,
+    buyingTokenPrice,
+    setBuyingToken,
+    sellingTokenAmount,
+    setSellingTokenAmount,
+  } = useTokenContext();
+  
+  useEffect(() => {}, [sellingTokenPrice,buyingTokenPrice]);
   return (
     <div className={style.wrapper}>
       <div className={style.content}>
@@ -69,7 +81,12 @@ export default function Swap() {
                   </div>
                 )}
               </Link>
-              <input type="text" placeholder="0" className={style.input} />
+              <input
+                type="text"
+                placeholder="0"
+                className={style.input}
+                onChange={(e) => setSellingTokenAmount(Number(e.target.value))}
+              />
             </div>
             <div className="flex justify-between">
               {sellingToken && (
@@ -78,10 +95,11 @@ export default function Swap() {
                   {sellingToken.name}
                 </h4>
               )}
-              {sellingToken && (
+              {sellingTokenPrice && (
                 <h4 className="text-sm text-gray-500 capitalize">
-                  {" "}
-                  {sellingToken.name}
+                  {"~"}
+                  {/* {sellingTokenPrice.price.slice(0, 6)} */}
+                  {Number(sellingTokenAmount)*Number(sellingTokenPrice.price)}
                 </h4>
               )}{" "}
             </div>
@@ -134,10 +152,10 @@ export default function Swap() {
                   {buyingToken.name}
                 </h4>
               )}
-              {buyingToken && (
+              {buyingTokenPrice && (
                 <h4 className="text-sm text-gray-500 capitalize">
-                  {" "}
-                  {buyingToken.name}
+                  {"~"}
+                  {buyingTokenPrice.price.slice(0, 6)}
                 </h4>
               )}{" "}
             </div>
