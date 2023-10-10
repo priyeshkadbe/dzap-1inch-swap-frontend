@@ -10,13 +10,19 @@
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
+    "@rainbow-me/rainbowkit": "^1.1.1",
+    "@rainbow-me/rainbowkit-siwe-next-auth": "^0.3.1",
+    "@web3modal/wagmi": "^3.0.2",
     "axios": "^1.5.1",
+    "ethers": "^6.7.1",
     "next": "13.5.4",
     "react": "^18",
     "react-dom": "^18",
     "react-icons": "^4.11.0",
     "react-shimmer": "^3.2.0",
-    "react-spinners": "^0.13.8"
+    "react-spinners": "^0.13.8",
+    "viem": "^1.16.0",
+    "wagmi": "^1.4.3"
   },
   "devDependencies": {
     "@types/node": "^20",

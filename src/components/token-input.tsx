@@ -1,11 +1,10 @@
-import React from "react";
-import Link from "next/navigation";
-import { AiOutlineDown } from "react-icons/ai";
-import { Token } from "../types"; // Define Token type if not already defined
-interface TokenSelectorProps {
-  token: Token | null;
-  onSelect: () => void;
+interface TokenInputProps {
+  placeholder: string;
+  value: number;
+  onChange: (value: number) => void;
+  disabled?: boolean;
 }
+
 
 const style = {
   wrapper: `w-screen flex items-center justify-center mt-14`,
@@ -22,23 +21,17 @@ const style = {
 };
 
 
-const TokenSelector: React.FC<TokenSelectorProps> = ({ token, onSelect }) => {
+const TokenInput: React.FC<TokenInputProps> = ({ placeholder, value, onChange, disabled }) => {
   return (
-    <div className={style.selectorDropdown} onClick={onSelect}>
-      {token ? (
-        <>
-          <div className="h-6 w-6">
-            <img src={token.logoURI} alt="token logo" />
-          </div>
-          <h4 className="text-sm">{token.symbol}</h4>
-        </>
-      ) : (
-        <h4 className="text-sm">Select Token</h4>
-      )}
-      <AiOutlineDown size={18} />
-    </div>
+    <input
+      type="text"
+      placeholder={placeholder}
+      className={style.input}
+      value={value}
+      onChange={(e) => onChange(Number(e.target.value))}
+      disabled={disabled}
+    />
   );
 };
 
-export default TokenSelector;
-
+export default TokenInput

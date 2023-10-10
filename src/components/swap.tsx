@@ -15,6 +15,8 @@ import ethLogo from "../assets/eth.png";
 import Link from "next/link";
 import { useTokenContext } from "@/context/TokenContext";
 import { useEffect } from "react";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { useAccount, useConnect, useDisconnect } from "wagmi";
 
 const style = {
   wrapper: `w-screen flex items-center justify-center mt-14`,
@@ -40,9 +42,21 @@ export default function Swap() {
     setBuyingToken,
     sellingTokenAmount,
     setSellingTokenAmount,
+    buyingTokenAmount,
+    gasFees
   } = useTokenContext();
-  
-  useEffect(() => {}, [sellingTokenPrice,buyingTokenPrice]);
+
+  useEffect(() => {}, [
+    sellingToken,
+    buyingToken,
+    sellingTokenPrice,
+    buyingTokenPrice,
+    buyingTokenAmount,
+    gasFees
+  ]);
+
+    const { address, isConnected } = useAccount();
+
   return (
     <div className={style.wrapper}>
       <div className={style.content}>
@@ -99,7 +113,7 @@ export default function Swap() {
                 <h4 className="text-sm text-gray-500 capitalize">
                   {"~"}
                   {/* {sellingTokenPrice.price.slice(0, 6)} */}
-                  {Number(sellingTokenAmount)*Number(sellingTokenPrice.price)}
+                  {Number(sellingTokenAmount) * Number(sellingTokenPrice.price)}
                 </h4>
               )}{" "}
             </div>
@@ -143,7 +157,13 @@ export default function Swap() {
                   </div>
                 )}
               </Link>
-              <input type="text" placeholder="0" className={style.input} />
+              <input
+                type="text"
+                placeholder="0"
+                className={style.input}
+                value={buyingTokenAmount ?? 0}
+                disabled
+              />
             </div>
             <div className="flex justify-between">
               {buyingToken && (
@@ -155,7 +175,7 @@ export default function Swap() {
               {buyingTokenPrice && (
                 <h4 className="text-sm text-gray-500 capitalize">
                   {"~"}
-                  {buyingTokenPrice.price.slice(0, 6)}
+                  {Number(buyingTokenAmount) * Number(buyingTokenPrice.price)}
                 </h4>
               )}{" "}
             </div>
@@ -165,26 +185,31 @@ export default function Swap() {
         <div className={style.rateContainer}>
           <div className="flex items-center justify-between">
             <AiOutlineInfoCircle className={style.icon} size={12} />
-            <p className="text-sm pl-1 text-gray-600">1</p>
-            <p className="text-sm text-gray-600"></p>
+            {/* <p className="text-sm pl-1 text-gray-600">1</p> */}
+            <p className="text-sm text-gray-600">1 {sellingToken?.name}</p>
             <LiaEqualsSolid className={style.icon} size={16} />
-            <p className="text-gray text-sm text-gray-600">adfadfadsf</p>
+            <p className="text-gray text-sm text-gray-600">
+              {buyingTokenAmount} {buyingToken?.name}{" "}
+            </p>
           </div>
           <div className="flex items-center gap-x-4">
             <FaGasPump className="text-sm text-gray-600" />
             <div className="text-sm flex items-center text-gray-600">
               <TbTilde className="text-sm" />
-              adfdf
+              {gasFees}
             </div>
           </div>
         </div>
-        {/* Connect Wallet Button */}
-        <button className={style.button}>
-          <RiWalletLine className="text-md text-blue-900 hover:text-white" />
-          <p className="text-md text-blue-900 hover:text-white">
-            Connect Wallet
-          </p>
-        </button>
+
+        {isConnected ? (
+          <button className={style.button}>
+            <p className="text-md text-white">swap</p>
+          </button>
+        ) : (
+          <div className="flex justify-center">
+            <ConnectButton />
+          </div>
+        )}
       </div>
     </div>
   );
