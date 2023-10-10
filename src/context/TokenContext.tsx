@@ -14,15 +14,9 @@ import { ethers } from "ethers";
 import SWAP_ABI from "../../abi/swap.json";
 import { serverConfig } from "@/config/serverConfig";
 import { useAccount } from "wagmi";
+import { Token } from "@/types";
 
-interface Token {
-  symbol: string;
-  name: string;
-  decimals: number;
-  address: string;
-  logoURI: string;
-  tags: string[];
-}
+
 
 interface TokenPrice {
   address: string;
@@ -41,6 +35,7 @@ interface TokenContextProps {
   setSellingTokenAmount: Dispatch<SetStateAction<number>>;
   buyingTokenAmount: number | null;
   gasFees: number;
+  
 }
 
 const TokenContext = createContext<TokenContextProps | undefined>(undefined);
@@ -96,6 +91,7 @@ export const TokenProvider: React.FC<{ children: ReactNode }> = ({
           price: price,
         };
         setTokenPrice(tokenPrice);
+        // setSellingTokenPrice(tokenPrice.price)
         console.log("saved", tokenPrice.price);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -146,7 +142,7 @@ export const TokenProvider: React.FC<{ children: ReactNode }> = ({
   const handleSwap = async () => {
     try {
       const provider = new ethers.AlchemyProvider(
-        null,
+        "mainnet",
         serverConfig.ALCHEMY_API_KEY
       );
 
@@ -211,3 +207,4 @@ export const useTokenContext = () => {
   }
   return context;
 };
+

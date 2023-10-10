@@ -18,13 +18,14 @@ import {
   polygon
 } from "wagmi/chains";
 import { publicProvider } from "wagmi/providers/public";
+import { serverConfig } from "@/config/serverConfig";
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   [polygon],
   [publicProvider()]
 );
 
-const projectId = "1945546bc864b66b0ec6a5044e380073";
+const projectId = serverConfig.ALCHEMY_API_KEY!;
 
 const { wallets } = getDefaultWallets({
   appName: "",

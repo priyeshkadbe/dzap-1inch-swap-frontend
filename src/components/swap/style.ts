@@ -1,12 +1,4 @@
-interface TokenInputProps {
-  placeholder: string;
-  value: number;
-  onChange: (value: number) => void;
-  disabled?: boolean;
-}
-
-
-const style = {
+export const style = {
   wrapper: `w-screen flex items-center justify-center mt-14`,
   content: `flex flex-col bg-[#191B1F] w-[30rem] rounded-2xl p-4`,
   formHeader: `px-2 flex items-center justify-between font-semibold text-xl`,
@@ -19,19 +11,3 @@ const style = {
   icon: `text-gray-600`,
   button: `w-full flex justify-center items-center gap-x-4 bg-blue-400 rounded-xl py-4 hover:bg-blue-900 text-blue-600 hover:text-white`,
 };
-
-
-const TokenInput: React.FC<TokenInputProps> = ({ placeholder, value, onChange, disabled }) => {
-  return (
-    <input
-      type="text"
-      placeholder={placeholder}
-      className={style.input}
-      value={value}
-      onChange={(e) => onChange(Number(e.target.value))}
-      disabled={disabled}
-    />
-  );
-};
-
-export default TokenInput

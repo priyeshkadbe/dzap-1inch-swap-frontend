@@ -1,44 +1,106 @@
-import React from "react";
-import Link from "next/navigation";
-import { AiOutlineDown } from "react-icons/ai";
-import { Token } from "../types"; // Define Token type if not already defined
+"use client";
+import { useEffect, useState, ChangeEvent } from "react";
+import { IoIosArrowBack } from "react-icons/io";
+import { AiOutlineSearch } from "react-icons/ai";
+import Link from "next/link";
+import { useTokenContext } from "@/context/TokenContext";
+import { useRouter } from "next/navigation";
+import { Token } from "@/types";
+import { useFetchTokens } from "@/hooks/useFetchTokens";
+import { RotatingLines } from "react-loader-spinner";
+import Image from "next/image";
+
 interface TokenSelectorProps {
-  token: Token | null;
-  onSelect: () => void;
+  onSelectToken: (token: Token) => void;
 }
 
-const style = {
-  wrapper: `w-screen flex items-center justify-center mt-14`,
-  content: `flex flex-col bg-[#191B1F] w-[30rem] rounded-2xl p-4`,
-  formHeader: `px-2 flex items-center justify-between font-semibold text-xl`,
-  container: `px-2 py-4 bg-[#20242A] my-3 rounded-2xl border border-[#20242A] hover:border-[#41444F]`,
-  selectorContainer: `flex flex-col gap-y-2 `,
-  selector: `flex justify-between items-center gap-x-2 `,
-  selectorDropdown: `text-gray-300 cursor-pointer flex items-center gap-x-2 bg-[#44556f] p-2 rounded-md `,
-  input: `bg-transparent text-xl text-end outline-none`,
-  rateContainer: `bg-gray-800 rounded-xl my-4 p-3 flex justify-between items-center`,
-  icon: `text-gray-600`,
-  button: `w-full flex justify-center items-center gap-x-4 bg-blue-400 rounded-xl py-4 hover:bg-blue-900 text-blue-600 hover:text-white`,
-};
+const TokenSelector: React.FC<TokenSelectorProps> = ({ onSelectToken }) => {
+  const { tokens, loading, error } = useFetchTokens();
+  const [searchInput, setSearchInput] = useState<string>("");
+  const [filteredTokens, setFilteredTokens] = useState<Token[]>(tokens);
+  const router = useRouter();
 
+  useEffect(() => {
+    setFilteredTokens(tokens);
+  }, [tokens]);
 
-const TokenSelector: React.FC<TokenSelectorProps> = ({ token, onSelect }) => {
+  useEffect(() => {}, [loading]);
+
+  const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+    setSearchInput(value);
+    const filtered = tokens.filter(
+      (token) =>
+        token.name.toLowerCase().includes(value.toLowerCase()) ||
+        token.symbol.toLowerCase().includes(value.toLowerCase()) ||
+        token.address.toLowerCase().includes(value.toLowerCase())
+    );
+    setFilteredTokens(filtered);
+  };
+
+  const handleTokenSelection = (token: Token) => {
+    onSelectToken(token);
+    console.log("token address", token);
+    router.push("/");
+  };
+
   return (
-    <div className={style.selectorDropdown} onClick={onSelect}>
-      {token ? (
-        <>
-          <div className="h-6 w-6">
-            <img src={token.logoURI} alt="token logo" />
-          </div>
-          <h4 className="text-sm">{token.symbol}</h4>
-        </>
-      ) : (
-        <h4 className="text-sm">Select Token</h4>
-      )}
-      <AiOutlineDown size={18} />
+    <div className="w-screen flex items-center justify-center mt-14">
+      <div className="flex flex-col bg-[#191B1F] w-[30rem] rounded-2xl p-4">
+        <div className="px-2 flex items-center justify-between font-semibold text-xl">
+          <Link href="/">
+            <IoIosArrowBack />
+          </Link>
+          <div>Search A Token</div>
+          <div className="flex  gap-x-4"></div>
+        </div>
+
+        <div className="outline outline-1 my-4 outline-gray-600 focus:outline-blue-800 rounded-md flex justify-between items-center py-2 px-4">
+          <AiOutlineSearch className="text-md" />
+          <input
+            type="text"
+            placeholder="search by name or paste address"
+            className="bg-transparent outline-none flex-1 px-4 "
+            value={searchInput}
+            onChange={handleSearchChange}
+          />
+        </div>
+        <div className="mt-2 border-t-2 p-2 h-96 overflow-y-auto">
+          {loading ? (
+            <div className="flex justify-center items-center h-full">
+              <RotatingLines
+                strokeColor="grey"
+                strokeWidth="5"
+                animationDuration="0.75"
+                width="96"
+                visible={true}
+              />
+            </div>
+          ) : (
+            filteredTokens.map((token, index) => (
+              <div
+                key={index}
+                className="flex justify-between items-center p-2 hover:bg-gray-600 rounded-md"
+                onClick={() => handleTokenSelection(token)}
+              >
+                <div className="flex items-center">
+                  <img
+                    src={token.logoURI}
+                    alt={token.name}
+                    className="h-12 w-12"
+                  />
+                  <div className="flex flex-col p-2">
+                    <h4>{token.name}</h4>
+                    <p>{token.symbol}</p>
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
     </div>
   );
 };
 
 export default TokenSelector;
-
