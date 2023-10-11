@@ -1,5 +1,5 @@
 import {serverConfig} from "@/config/serverConfig"
-export const Route = {
+export const route = {
   fetchToken: serverConfig.API_URL + "tokens/",
   getQuote:serverConfig.API_URL+"get-quote/"
 };

@@ -1,6 +1,5 @@
 "use client";
-import { Route } from "@/Routes/Route";
-import axios from "axios";
+
 import React, {
   createContext,
   ReactNode,
@@ -10,13 +9,9 @@ import React, {
   SetStateAction,
   useEffect,
 } from "react";
-import { ethers } from "ethers";
-import SWAP_ABI from "../../abi/swap.json";
-import { serverConfig } from "@/config/serverConfig";
+
 import { useAccount } from "wagmi";
 import { Token } from "@/types";
-
-
 
 interface TokenPrice {
   address: string;
@@ -35,7 +30,6 @@ interface TokenContextProps {
   setSellingTokenAmount: Dispatch<SetStateAction<number>>;
   buyingTokenAmount: number | null;
   gasFees: number;
-  
 }
 
 const TokenContext = createContext<TokenContextProps | undefined>(undefined);
@@ -58,8 +52,6 @@ export const TokenProvider: React.FC<{ children: ReactNode }> = ({
   const [buyingTokenAmount, setBuyingTokenAmount] = useState<number>(0);
 
   const { address, isConnecting, isDisconnected } = useAccount();
-
-  
 
   return (
     <TokenContext.Provider
@@ -89,4 +81,3 @@ export const useTokenContext = () => {
   }
   return context;
 };
-

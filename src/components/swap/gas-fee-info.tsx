@@ -7,45 +7,57 @@ import { style } from "./style";
 import { useFetchQuote } from "@/hooks/useFetchQuote";
 
 interface GasFeeInfoProps {
-  gas: number;
-  sellingTokenName?: string;
-  buyingTokenAmount?: number;
-  buyingTokenName?: string;
+  loading: boolean;
+  error: string | null;
+  toAmount: number | null;
+  gas: number | null;
+  sellingTokenName: string | undefined;
+  buyingTokenAmount: number | null;
+  sellingTokenAmount: string | number; // Add this line to include sellingTokenAmount
+  buyingTokenName: string | undefined;
 }
 
 const GasFeeInfo: React.FC<GasFeeInfoProps> = ({
+  loading,
+  error,
   gas,
+  toAmount,
   sellingTokenName,
+  sellingTokenAmount,
   buyingTokenAmount,
   buyingTokenName,
 }) => {
-  const { toAmount, loading, error } = useFetchQuote();
+  
+  const calculatedPrice =
+    Number(buyingTokenAmount) / Number(sellingTokenAmount);
 
   useEffect(() => {}, [
     gas,
     sellingTokenName,
     buyingTokenAmount,
     buyingTokenName,
-    toAmount,
+    calculatedPrice,
   ]);
+
+
 
   return (
     <>
-      {gas !== (0 || null) && (
+      {gas !== (0 && null) && (
         <div className={style.rateContainer}>
           <div className="flex items-center justify-between">
             <AiOutlineInfoCircle className={style.icon} size={12} />
             <p className="text-sm text-gray-600">1 {sellingTokenName}</p>
             <LiaEqualsSolid className={style.icon} size={16} />
             <p className="text-gray text-sm text-gray-600">
-              {buyingTokenAmount} {buyingTokenName}
+              {calculatedPrice} {buyingTokenName}
             </p>
           </div>
           <div className="flex items-center gap-x-4 mt-4">
             <FaGasPump className="text-sm text-gray-600" />
             <div className="text-sm flex items-center text-gray-600">
               <TbTilde className="text-sm" />
-              {toAmount}
+              {gas}
             </div>
           </div>
         </div>

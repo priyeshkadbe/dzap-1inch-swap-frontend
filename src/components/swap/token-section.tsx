@@ -4,7 +4,6 @@ import TokenInput from "./token-input";
 import TokenInfo from "./token-info";
 import { style } from "./style";
 import { Token } from "@/types";
-import { useFetchTokenPrice } from "@/hooks/useFetchTokenPrice";
 
 interface TokenSectionProps {
   title: string;
@@ -12,9 +11,9 @@ interface TokenSectionProps {
   linkPath: string;
   amount: number;
   onAmountChange?: (value: number) => void;
-  price?: number | null;
   disabled?: boolean;
   placeholder: string;
+  toAmount: number | null;
 }
 
 const TokenSection: React.FC<TokenSectionProps> = ({
@@ -23,15 +22,11 @@ const TokenSection: React.FC<TokenSectionProps> = ({
   linkPath,
   amount,
   onAmountChange,
-  price,
   disabled = false,
   placeholder,
+  toAmount,
 }) => {
-  useEffect(() => {}, [token, amount, onAmountChange, price]);
-
-  const { loading, error, tokenPrice } = useFetchTokenPrice(token?.address);
-
-  console.log("loading is", loading, error, tokenPrice);
+  useEffect(() => {}, [token, amount, onAmountChange]);
 
   return (
     <div className={style.container}>
@@ -44,13 +39,11 @@ const TokenSection: React.FC<TokenSectionProps> = ({
             onChange={onAmountChange}
             placeholder={placeholder}
             disabled={disabled}
+            toAmount={toAmount}
           />
         </div>
         <TokenInfo
-          loading={loading}
-          token={token}
-          price={price!}
-          amount={amount}
+         token={token}
         />
       </div>
     </div>

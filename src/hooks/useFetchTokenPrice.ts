@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Route } from "@/Routes/Route";
+import { route } from "@/routes/route";
 import { TokenPrice } from "@/types";
 import { serverConfig } from "@/config/serverConfig";
 
@@ -11,7 +11,7 @@ interface FetchTokenPriceResponse {
 }
 
 export const useFetchTokenPrice = (
-  tokenAddress: string | null
+  tokenAddress: string
 ): FetchTokenPriceResponse => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -23,7 +23,7 @@ export const useFetchTokenPrice = (
       setError(null);
       try {
         const response = await axios.get(
-          `${Route.fetchToken}${tokenAddress}`
+          `${route.fetchToken}${tokenAddress}`
         );
         console.log("response is ", response.data.data);
         const [address, price] = Object.entries(response.data.data)[0];

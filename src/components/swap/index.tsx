@@ -14,14 +14,15 @@ import { style } from "./style";
 import TokenSection from "./token-section";
 import SwapButton from "./swap-button";
 import useTokenSwap from "@/hooks/useSwapToken";
+import SwapHeader from "./swap-header";
+import { useFetchTokenPrice } from "@/hooks/useFetchTokenPrice";
+import Layout from "./layout";
 
 export default function Swap() {
   const {
     tokens,
     sellingToken,
     buyingToken,
-    sellingTokenPrice,
-    buyingTokenPrice,
     setBuyingToken,
     sellingTokenAmount,
     setSellingTokenAmount,
@@ -34,71 +35,58 @@ export default function Swap() {
     tokenInAmount: sellingTokenAmount.toString(),
   };
 
-  const { loading, error, toAmount, gas } = useFetchQuote();
+  const { toAmount, gas, loading, error } = useFetchQuote({
+    sellingToken,
+    buyingToken,
+    sellingTokenAmount,
+  });
 
   useEffect(() => {}, [
     tokens,
     sellingToken,
     buyingToken,
-    sellingTokenPrice,
-    buyingTokenPrice,
     setBuyingToken,
     sellingTokenAmount,
     setSellingTokenAmount,
     buyingTokenAmount,
-    gas,
   ]);
 
   const { address, isConnected } = useAccount();
 
   return (
-    <div className={style.wrapper}>
-      <div className={style.content}>
-        <div className={style.formHeader}>
-          <div>Swap</div>
-          <div className="flex gap-x-4">
-            <IoMdRefresh />
-            <AiOutlinePlus />
-            <HiAdjustmentsHorizontal />
-          </div>
-        </div>
-        {/* You sell */}
-        <TokenSection
-          title="You sell"
-          token={sellingToken}
-          linkPath="/select-selling-token"
-          amount={sellingTokenAmount}
-          onAmountChange={setSellingTokenAmount}
-          price={sellingTokenPrice?.price}
-          placeholder="0"
-        />
-        {/* Arrow */}
-        {/* <div className="  bg-gray-800 p-2  rounded-full mx-auto absolute right-1/2 bottom-1/2 transform translate-x-4  translate-y-4">
-          <AiOutlineArrowDown
-            className="text-lg text-white hover:transform hover:rotate-180 "
-            size={30}
-          />
-        </div> */}
+    <Layout>
+      <SwapHeader />
+      {/* You sell */}
+      <TokenSection
+        title="You sell"
+        token={sellingToken}
+        linkPath="/select-selling-token"
+        amount={sellingTokenAmount ?? 0}
+        onAmountChange={setSellingTokenAmount}
+        placeholder="0"
+        toAmount={toAmount}
+      />
+      <TokenSection
+        title="You buy"
+        token={buyingToken}
+        linkPath="/select-buying-token"
+        amount={buyingTokenAmount ?? 0}
+        toAmount={toAmount}
+        disabled
+        placeholder="0"
+      />
+      <GasFeeInfo
+        loading={loading}
+        error={error}
+        gas={gas}
+        toAmount={toAmount}
+        sellingTokenName={sellingToken?.name}
+        sellingTokenAmount={sellingTokenAmount}
+        buyingTokenName={buyingToken?.name}
+        buyingTokenAmount={toAmount}
+      />
 
-        {/* You buy */}
-        <TokenSection
-          title="You buy"
-          token={buyingToken}
-          linkPath="/select-buying-token"
-          amount={buyingTokenAmount ?? 0}
-          price={buyingTokenPrice?.price}
-          disabled
-          placeholder="0"
-        />
-
-        <GasFeeInfo
-          gas={gas!}
-          buyingTokenAmount={buyingTokenAmount!}
-          sellingTokenName={sellingToken?.name!}
-        />
-
-        <SwapButton isConnected={isConnected} />
-      </div>
-    </div>
+      <SwapButton isConnected={isConnected} />
+    </Layout>
   );
 }

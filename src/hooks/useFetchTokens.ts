@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { Route } from "@/Routes/Route";
+import { route } from "@/routes/route";
 import { Token } from "@/types";
 import { serverConfig } from "@/config/serverConfig";
 
@@ -13,7 +13,7 @@ export const useFetchTokens = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(Route.fetchToken);
+        const response = await axios.get(route.fetchToken);
         const tokenData = response.data.data.tokens;
         const tokenArray: Token[] = [];
         for (const key in tokenData) {
