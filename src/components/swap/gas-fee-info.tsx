@@ -6,7 +6,6 @@ import { TbTilde } from "react-icons/tb";
 import { style } from "./style";
 import { useFetchQuote } from "@/hooks/useFetchQuote";
 
-
 interface GasFeeInfoProps {
   gas: number;
   sellingTokenName?: string;
@@ -20,21 +19,16 @@ const GasFeeInfo: React.FC<GasFeeInfoProps> = ({
   buyingTokenAmount,
   buyingTokenName,
 }) => {
+  const { toAmount, loading, error } = useFetchQuote();
 
+  useEffect(() => {}, [
+    gas,
+    sellingTokenName,
+    buyingTokenAmount,
+    buyingTokenName,
+    toAmount,
+  ]);
 
- const { toAmount, loading, error } = useFetchQuote();
-
-    useEffect(() => {}, [
-      gas,
-      sellingTokenName,
-      buyingTokenAmount,
-      buyingTokenName,
-      toAmount
-    ]);
-
-   
-
-  
   return (
     <>
       {gas !== (0 || null) && (

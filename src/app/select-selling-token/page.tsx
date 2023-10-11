@@ -1,5 +1,5 @@
 "use client"
-import TokenSelector from "@/components/token-selector";
+import TokenSelector from "@/components/token-selector/index";
 import { useTokenContext } from "@/context/TokenContext";
 
 const SelectSellingToken = () => {

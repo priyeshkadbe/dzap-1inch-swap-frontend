@@ -1,33 +1,30 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useTokenContext } from "@/context/TokenContext";
-import {serverConfig} from "@/config/serverConfig"
+import { serverConfig } from "@/config/serverConfig";
+import { Route } from "@/Routes/Route";
 export const useFetchQuote = () => {
   const [toAmount, setToAmount] = useState<number | null>(null);
   const [gas, setGas] = useState<number | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-
-  
-const {
-  sellingToken,
-  buyingToken,
-  sellingTokenAmount,
-} = useTokenContext();
-let requestData = {
-  tokenIn: sellingToken?.address,
-  tokenOut: buyingToken?.address,
-  tokenInAmount: sellingTokenAmount.toString(),
-};
-
-
+  const { sellingToken, buyingToken, sellingTokenAmount } = useTokenContext();
+  let requestData = {
+    tokenIn: sellingToken?.address,
+    tokenOut: buyingToken?.address,
+    tokenInAmount: sellingTokenAmount.toString(),
+  };
 
   useEffect(() => {
-    if (sellingToken !== null && sellingTokenAmount !== null && buyingToken !== null) {
+    if (
+      sellingToken !== null &&
+      sellingTokenAmount !== null &&
+      buyingToken !== null
+    ) {
       const fetchData = async () => {
         try {
-          const response = await axios.get(`${serverConfig.API_URL}get-quote`, {
+          const response = await axios.get(Route.getQuote, {
             params: requestData,
           });
           const { toAmount, gas } = response.data.data;
@@ -40,10 +37,9 @@ let requestData = {
           setLoading(false);
         }
       };
-          fetchData();
+      fetchData();
     }
-
-  }, [sellingToken,buyingToken,sellingTokenAmount]);
+  }, [sellingToken, buyingToken, sellingTokenAmount]);
 
   return { toAmount, gas, loading, error };
 };
