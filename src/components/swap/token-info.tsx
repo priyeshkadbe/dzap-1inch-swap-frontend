@@ -1,12 +1,12 @@
 
 
 
+import { useFetchTokenPrice } from "@/hooks/useFetchTokenPrice";
+import { Token } from "@/types";
 import React, { useEffect } from "react";
 
 interface TokenInfoProps {
-  token: {
-    name: string;
-  } | null;
+  token: Token;
   price: number | null;
   amount: number;
 }
@@ -14,7 +14,11 @@ interface TokenInfoProps {
 const TokenInfo: React.FC<TokenInfoProps> = ({ token, price, amount }) => {
   const calculatedPrice = token && price ? amount * price : 0;
 
-  useEffect(()=>{},[token,price,amount])
+  const {tokenPrice,loading,error}=useFetchTokenPrice(token?.address)
+
+  useEffect(() => {
+        console.log("tokenprice", tokenPrice, loading, error);
+  },[tokenPrice,loading,error])
 
 
   return (
@@ -22,12 +26,20 @@ const TokenInfo: React.FC<TokenInfoProps> = ({ token, price, amount }) => {
       {token && (
         <h4 className="text-sm text-gray-500 capitalize"> {token.name}</h4>
       )}
-      {token && price && (
-        <h4 className="text-sm text-gray-500 capitalize">
-          {"~"}
-          {calculatedPrice}
-        </h4>
-      )}
+      {token &&
+        price &&
+        (loading ? (
+          <p>loading</p>
+        ) : (
+          <h4 className="text-sm text-gray-500 capitalize">
+            {"~"}
+            {tokenPrice?.price}
+          </h4>
+        ))}
+
+      {/* {
+        loading?<p>loaading</p>:tokenPrice?.price
+      } */}
     </div>
   );
 };

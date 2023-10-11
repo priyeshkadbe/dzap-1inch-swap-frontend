@@ -24,26 +24,25 @@ let requestData = {
 
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          `${serverConfig.API_URL}get-quote`,
-          {
+    if (sellingToken !== null && sellingTokenAmount !== null && buyingToken !== null) {
+      const fetchData = async () => {
+        try {
+          const response = await axios.get(`${serverConfig.API_URL}get-quote`, {
             params: requestData,
-          }
-        );
-        const { toAmount, gas } = response.data.data;
-        setToAmount(toAmount);
-        setGas(gas);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error calculating receiving token:", error);
-        setError("An error occurred while calculating receiving token.");
-        setLoading(false);
-      }
-    };
+          });
+          const { toAmount, gas } = response.data.data;
+          setToAmount(toAmount);
+          setGas(gas);
+          setLoading(false);
+        } catch (error) {
+          console.error("Error calculating receiving token:", error);
+          setError("An error occurred while calculating receiving token.");
+          setLoading(false);
+        }
+      };
+          fetchData();
+    }
 
-    fetchData();
   }, [sellingToken,buyingToken,sellingTokenAmount]);
 
   return { toAmount, gas, loading, error };

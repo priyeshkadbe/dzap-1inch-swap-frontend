@@ -4,6 +4,7 @@ import { FaGasPump } from "react-icons/fa";
 import { LiaEqualsSolid } from "react-icons/lia";
 import { TbTilde } from "react-icons/tb";
 import { style } from "./style";
+import { useFetchQuote } from "@/hooks/useFetchQuote";
 
 
 interface GasFeeInfoProps {
@@ -20,16 +21,23 @@ const GasFeeInfo: React.FC<GasFeeInfoProps> = ({
   buyingTokenName,
 }) => {
 
+
+ const { toAmount, loading, error } = useFetchQuote();
+
     useEffect(() => {}, [
       gas,
       sellingTokenName,
       buyingTokenAmount,
       buyingTokenName,
+      toAmount
     ]);
 
+   
+
+  
   return (
     <>
-      {gas !== (0||null) && (
+      {gas !== (0 || null) && (
         <div className={style.rateContainer}>
           <div className="flex items-center justify-between">
             <AiOutlineInfoCircle className={style.icon} size={12} />
@@ -43,7 +51,7 @@ const GasFeeInfo: React.FC<GasFeeInfoProps> = ({
             <FaGasPump className="text-sm text-gray-600" />
             <div className="text-sm flex items-center text-gray-600">
               <TbTilde className="text-sm" />
-              {gas}
+              {toAmount}
             </div>
           </div>
         </div>

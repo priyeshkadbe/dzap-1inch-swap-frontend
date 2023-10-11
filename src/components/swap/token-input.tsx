@@ -6,6 +6,7 @@ interface TokenInputProps {
   onChange?: (value: number) => void;
   placeholder: string;
   disabled?: boolean;
+  loading?:boolean
 }
 
 
@@ -16,6 +17,7 @@ const TokenInput: React.FC<TokenInputProps> = ({
   onChange,
   placeholder,
   disabled = false,
+  loading
 }) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (onChange) {
@@ -23,6 +25,17 @@ const TokenInput: React.FC<TokenInputProps> = ({
     }
   };
 
+  if (disabled) {
+    return  loading?<h1>loading</h1> :<input
+      type="text"
+      placeholder={placeholder}
+      className={style.input}
+      value={value}
+      onChange={handleChange}
+      disabled={disabled}
+    />
+    
+  }
   return (
     <input
       type="text"

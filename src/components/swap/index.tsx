@@ -1,9 +1,4 @@
-import {
-  
-  AiOutlinePlus,
-  
-  AiOutlineArrowDown,
-} from "react-icons/ai";
+import { AiOutlinePlus, AiOutlineArrowDown } from "react-icons/ai";
 import { HiAdjustmentsHorizontal } from "react-icons/hi2";
 
 import { IoMdRefresh } from "react-icons/io";
@@ -14,11 +9,11 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useAccount, useConnect, useDisconnect } from "wagmi";
 import { useFetchQuote } from "@/hooks/useFetchQuote";
 
-
 import GasFeeInfo from "./gas-fee-info";
-import {style} from "./style";
+import { style } from "./style";
 import TokenSection from "./token-section";
 import SwapButton from "./swap-button";
+import useTokenSwap from "@/hooks/useSwapToken";
 
 export default function Swap() {
   const {
@@ -42,7 +37,7 @@ export default function Swap() {
   const { loading, error, toAmount, gas } = useFetchQuote();
 
   useEffect(() => {}, [
-   tokens,
+    tokens,
     sellingToken,
     buyingToken,
     sellingTokenPrice,
@@ -51,7 +46,7 @@ export default function Swap() {
     sellingTokenAmount,
     setSellingTokenAmount,
     buyingTokenAmount,
-    gas
+    gas,
   ]);
 
   const { address, isConnected } = useAccount();
@@ -78,12 +73,12 @@ export default function Swap() {
           placeholder="0"
         />
         {/* Arrow */}
-        <div className="flex justify-center">
+        {/* <div className="  bg-gray-800 p-2  rounded-full mx-auto absolute right-1/2 bottom-1/2 transform translate-x-4  translate-y-4">
           <AiOutlineArrowDown
-            className="text-lg text-white bg-gray-700 p-2 rounded-full"
-            size={16}
+            className="text-lg text-white hover:transform hover:rotate-180 "
+            size={30}
           />
-        </div>
+        </div> */}
 
         {/* You buy */}
         <TokenSection
@@ -102,7 +97,7 @@ export default function Swap() {
           sellingTokenName={sellingToken?.name!}
         />
 
-        <SwapButton isConnected={ isConnected} />
+        <SwapButton isConnected={isConnected} />
       </div>
     </div>
   );
