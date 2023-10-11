@@ -37,19 +37,19 @@ const useTokenSwap = (
           );
 
           const desc = {
-            srcToken: sellingToken.address, // Source token address
-            dstToken: buyingToken.address, // Destination token address
-            srcReceiver: address, // Source token receiver address
-            dstReceiver: address, // Destination token receiver address
-            amount: ethers.parseUnits(sellingTokenAmount.toString()), // Amount to swap (1 Ether in this example)
+            srcToken: sellingToken.address,
+            dstToken: buyingToken.address, 
+            srcReceiver: address, 
+            dstReceiver: address, 
+            amount: ethers.parseUnits(sellingTokenAmount.toString()), 
             minReturnAmount: ethers.parseEther(
               (sellingTokenAmount * 0.9).toString()
-            ), // Minimum return amount (90% of selling token amount in Ether)
-            flags: 0, // Flags (if any)
+            ),
+            flags: 0, 
           };
-          const data = "0x..."; // Additional data for the swap
+          const data = "0x...";
           const swapResult = await swapContract.swap(desc, data, {
-            value: desc.amount, // Send Ether if the swap function is payable
+            value: desc.amount, 
           });
 
           await swapResult.wait();
