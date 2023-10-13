@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { style } from "./style";
 
 interface TokenInputProps {
@@ -9,9 +9,6 @@ interface TokenInputProps {
   disabled?: boolean;
   loading?: boolean;
 }
-
-
-
 
 const TokenInput: React.FC<TokenInputProps> = ({
   value,
@@ -27,21 +24,16 @@ const TokenInput: React.FC<TokenInputProps> = ({
     }
   };
 
-  return toAmount && disabled ? (
+  useEffect(() => {
+    
+  },[value,toAmount,loading])
+
+  return (
     <input
       type="text"
       placeholder={placeholder}
       className={style.input}
-      value={toAmount}
-      onChange={handleChange}
-      disabled={disabled}
-    />
-  ) : (
-    <input
-      type="text"
-      placeholder={placeholder}
-      className={style.input}
-      value={value}
+      value={disabled ? toAmount! : value}
       onChange={handleChange}
       disabled={disabled}
     />

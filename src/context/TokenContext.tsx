@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, {
   createContext,
@@ -8,15 +8,20 @@ import React, {
   Dispatch,
   SetStateAction,
   useEffect,
-} from "react";
+} from 'react';
 
-import { useAccount } from "wagmi";
-import { Token } from "@/types";
+import { useAccount, useNetwork } from 'wagmi';
+import { Token } from '@/types';
+import { useBalance } from 'wagmi';
 
 interface TokenPrice {
   address: string;
   price: any;
 }
+import useProvider  from 'wagmi';
+import { useFetchTokens } from '@/hooks/useFetchTokens';
+import axios from 'axios';
+import { route } from '@/api-routes/api-routes';
 
 interface TokenContextProps {
   sellingToken: Token | null;
@@ -41,18 +46,30 @@ export const TokenProvider: React.FC<{ children: ReactNode }> = ({
   const [buyingToken, setBuyingToken] = useState<Token | null>(null);
   const [tokens, setTokens] = useState<Token[]>([]);
   const [sellingTokenPrice, setSellingTokenPrice] = useState<TokenPrice | null>(
-    null
+    null,
   );
 
   const [gasFees, setGasFees] = useState(0);
   const [buyingTokenPrice, setBuyingTokenPrice] = useState<TokenPrice | null>(
-    null
+    null,
   );
   const [sellingTokenAmount, setSellingTokenAmount] = useState<number>(0);
   const [buyingTokenAmount, setBuyingTokenAmount] = useState<number>(0);
 
   const { address, isConnecting, isDisconnected } = useAccount();
+  const { chain, chains } = useNetwork();
+  const { data } = useBalance({
+  address
+})
 
+
+  useEffect(() => {
+    console.log("chains", data?.formatted);
+    },[chain])
+
+
+  // const tokensResponse = useFetchTokens();
+  // setTokens(tokensResponse.tokens);
   return (
     <TokenContext.Provider
       value={{
@@ -74,10 +91,12 @@ export const TokenProvider: React.FC<{ children: ReactNode }> = ({
   );
 };
 
+
+
 export const useTokenContext = () => {
   const context = useContext(TokenContext);
   if (!context) {
-    throw new Error("useTokenContext must be used within a TokenProvider");
+    throw new Error('useTokenContext must be used within a TokenProvider');
   }
   return context;
 };

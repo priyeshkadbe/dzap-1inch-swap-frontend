@@ -58,7 +58,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <WagmiConfig config={wagmiConfig}>
       <RainbowKitProvider chains={chains} appInfo={demoAppInfo}>
-        {children}
+        {mounted && children}
       </RainbowKitProvider>
     </WagmiConfig>
   );

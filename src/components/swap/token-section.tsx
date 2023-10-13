@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
-import TokenSelectorLink from "./token.selector-link";
-import TokenInput from "./token-input";
-import TokenInfo from "./token-info";
-import { style } from "./style";
-import { Token } from "@/types";
+import React, { useEffect } from 'react';
+import TokenSelectorLink from './token.selector-link';
+import TokenInput from './token-input';
+import TokenInfo from './token-info';
+import { style } from './style';
+import { Token } from '@/types';
 
 interface TokenSectionProps {
   title: string;
@@ -42,9 +42,7 @@ const TokenSection: React.FC<TokenSectionProps> = ({
             toAmount={toAmount}
           />
         </div>
-        <TokenInfo
-         token={token}
-        />
+        <TokenInfo token={token} />
       </div>
     </div>
   );

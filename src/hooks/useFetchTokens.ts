@@ -1,9 +1,8 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
-import { route } from "@/routes/route";
-import { Token } from "@/types";
-import { serverConfig } from "@/config/serverConfig";
-
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import { route } from '@/api-routes/api-routes';
+import { Token } from '@/types';
+import { serverConfig } from '@/config/serverConfig';
 
 export const useFetchTokens = () => {
   const [tokens, setTokens] = useState<Token[]>([]);
@@ -24,8 +23,8 @@ export const useFetchTokens = () => {
         setTokens(tokenArray);
         setLoading(false);
       } catch (error) {
-        console.error("Error fetching data:", error);
-        setError("An error occurred while fetching data.");
+        console.error('Error fetching data:', error);
+        setError('An error occurred while fetching data.');
         setLoading(false);
       }
     };

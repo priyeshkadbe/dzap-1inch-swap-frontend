@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Token } from "@/types";
 
 interface TokenItemProps {
@@ -12,6 +12,9 @@ const TokenItem: React.FC<TokenItemProps> = ({
   index,
   handleTokenSelection,
 }) => {
+
+  useEffect(() => {}, [token, index, handleTokenSelection]);
+
   return (
     <div
       key={index}

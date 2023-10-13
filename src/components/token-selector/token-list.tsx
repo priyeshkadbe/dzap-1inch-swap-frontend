@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { RotatingLines } from "react-loader-spinner";
 import { Token } from "@/types";
 import TokenItem from "./token-item";
+import { useTokenContext } from "@/context/TokenContext";
 
 interface TokenListProps {
   loading: boolean;
@@ -14,6 +15,8 @@ const TokenList: React.FC<TokenListProps> = ({
   filteredTokens,
   handleTokenSelection,
 }) => {
+
+  useEffect(() => {}, [loading, filteredTokens, handleTokenSelection]);
   return (
     <div className="mt-2 border-t-2 p-2 h-96 overflow-y-auto">
       {loading ? (

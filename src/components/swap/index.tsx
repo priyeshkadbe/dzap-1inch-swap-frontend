@@ -2,7 +2,10 @@ import { AiOutlinePlus, AiOutlineArrowDown } from "react-icons/ai";
 import { HiAdjustmentsHorizontal } from "react-icons/hi2";
 
 import { IoMdRefresh } from "react-icons/io";
-
+import {
+  BsFillArrowUpCircleFill,
+  BsFillArrowDownCircleFill,
+} from 'react-icons/bs';
 import { useTokenContext } from "@/context/TokenContext";
 import { useEffect } from "react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
@@ -13,7 +16,7 @@ import GasFeeInfo from "./gas-fee-info";
 import { style } from "./style";
 import TokenSection from "./token-section";
 import SwapButton from "./swap-button";
-import useTokenSwap from "@/hooks/useSwapToken";
+import {useSwapTokens} from "@/hooks/useSwapToken";
 import SwapHeader from "./swap-header";
 import { useFetchTokenPrice } from "@/hooks/useFetchTokenPrice";
 import Layout from "./layout";
@@ -41,6 +44,8 @@ export default function Swap() {
     sellingTokenAmount,
   });
 
+ 
+
   useEffect(() => {}, [
     tokens,
     sellingToken,
@@ -66,6 +71,16 @@ export default function Swap() {
         placeholder="0"
         toAmount={toAmount}
       />
+
+      <button
+        className="flex justify-center absolute right-40 top-44  md:right-[210px]  md:top-1/3  transition-transform ease-in-out"
+      >
+        <AiOutlineArrowDown
+          size={60}
+          className="bg-[#191B1F] rounded-full p-4 transition-transform duration-300 ease-in-out transform hover:rotate-180 "
+        />
+      </button>
+
       <TokenSection
         title="You buy"
         token={buyingToken}
@@ -84,9 +99,10 @@ export default function Swap() {
         sellingTokenAmount={sellingTokenAmount}
         buyingTokenName={buyingToken?.name}
         buyingTokenAmount={toAmount}
+        decimal={buyingToken?.decimals}
       />
 
-      <SwapButton isConnected={isConnected} />
+      <SwapButton />
     </Layout>
   );
 }

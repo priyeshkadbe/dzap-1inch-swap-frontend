@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { route } from "@/routes/route";
-import { TokenPrice } from "@/types";
-import { serverConfig } from "@/config/serverConfig";
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { route } from '@/api-routes/api-routes';
+import { TokenPrice } from '@/types';
+import { serverConfig } from '@/config/serverConfig';
 
 interface FetchTokenPriceResponse {
   loading: boolean;
@@ -11,7 +11,7 @@ interface FetchTokenPriceResponse {
 }
 
 export const useFetchTokenPrice = (
-  tokenAddress: string
+  tokenAddress: string,
 ): FetchTokenPriceResponse => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -22,20 +22,17 @@ export const useFetchTokenPrice = (
       setLoading(true);
       setError(null);
       try {
-        const response = await axios.get(
-          `${route.fetchToken}${tokenAddress}`
-        );
-        console.log("response is ", response.data.data);
+        const response = await axios.get(`${route.fetchToken}${tokenAddress}`);
+        console.log('response is ', response.data.data);
         const [address, price] = Object.entries(response.data.data)[0];
         const fetchedTokenPrice: TokenPrice = {
           address: address,
           price: price,
         };
         setTokenPrice(fetchedTokenPrice);
-
       } catch (error) {
-        setError("Error fetching token price.");
-        console.error("Error fetching token price:", error);
+        setError('Error fetching token price.');
+        console.error('Error fetching token price:', error);
       } finally {
         setLoading(false);
       }

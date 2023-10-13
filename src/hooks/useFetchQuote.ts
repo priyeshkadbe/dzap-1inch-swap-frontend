@@ -1,24 +1,27 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
-import { useTokenContext } from "@/context/TokenContext";
-import { serverConfig } from "@/config/serverConfig";
-import { route } from "@/routes/route";
-import { Token } from "@/types";
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useTokenContext } from '@/context/TokenContext';
+import { serverConfig } from '@/config/serverConfig';
+import { route } from '@/api-routes/api-routes';
+import { Token } from '@/types';
 
 interface useFetchQuoteProps {
   sellingToken: Token | null;
   buyingToken: Token | null;
-  sellingTokenAmount:  number|null;
+  sellingTokenAmount: number | null;
 }
 
-export const useFetchQuote = ({ sellingToken, buyingToken, sellingTokenAmount }:useFetchQuoteProps) => {
+export const useFetchQuote = ({
+  sellingToken,
+  buyingToken,
+  sellingTokenAmount,
+}: useFetchQuoteProps) => {
   const [toAmount, setToAmount] = useState<number | null>(null);
   const [gas, setGas] = useState<number | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   // const { sellingToken, buyingToken, sellingTokenAmount } = useTokenContext();
- 
 
   useEffect(() => {
     if (
@@ -26,12 +29,11 @@ export const useFetchQuote = ({ sellingToken, buyingToken, sellingTokenAmount }:
       sellingTokenAmount !== null &&
       buyingToken !== null
     ) {
-
-       let requestData = {
-         tokenIn: sellingToken?.address,
-         tokenOut: buyingToken?.address,
-         tokenInAmount: sellingTokenAmount.toString(),
-       };
+      let requestData = {
+        tokenIn: sellingToken?.address,
+        tokenOut: buyingToken?.address,
+        tokenInAmount: sellingTokenAmount.toString(),
+      };
 
       const fetchData = async () => {
         try {
@@ -43,8 +45,8 @@ export const useFetchQuote = ({ sellingToken, buyingToken, sellingTokenAmount }:
           setGas(gas);
           setLoading(false);
         } catch (error) {
-          console.error("Error calculating receiving token:", error);
-          setError("An error occurred while calculating receiving token.");
+          console.error('Error calculating receiving token:', error);
+          setError('An error occurred while calculating receiving token.');
           setLoading(false);
         }
       };
