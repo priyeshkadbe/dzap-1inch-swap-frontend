@@ -15,8 +15,8 @@ const TokenList: React.FC<TokenListProps> = ({
   filteredTokens,
   handleTokenSelection,
 }) => {
-
   useEffect(() => {}, [loading, filteredTokens, handleTokenSelection]);
+
   return (
     <div className="mt-2 border-t-2 p-2 h-96 overflow-y-auto">
       {loading ? (
@@ -30,7 +30,7 @@ const TokenList: React.FC<TokenListProps> = ({
           />
         </div>
       ) : (
-        filteredTokens.map((token, index) => (
+        filteredTokens?.map((token, index) => (
           <TokenItem
             index={index}
             key={index}

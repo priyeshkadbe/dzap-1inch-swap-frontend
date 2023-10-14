@@ -1,4 +1,4 @@
-[
+{"abi":[
   {
     "inputs": [
       { "internalType": "contract IWETH", "name": "weth", "type": "address" }
@@ -1226,4 +1226,4 @@
     "type": "function"
   },
   { "stateMutability": "payable", "type": "receive" }
-]
+]}

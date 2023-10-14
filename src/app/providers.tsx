@@ -7,7 +7,8 @@ import {
   RainbowKitProvider,
   getDefaultWallets,
   connectorsForWallets,
-} from "@rainbow-me/rainbowkit";
+  darkTheme,
+} from '@rainbow-me/rainbowkit';
 import {
   argentWallet,
   trustWallet,
@@ -15,14 +16,19 @@ import {
 } from "@rainbow-me/rainbowkit/wallets";
 import { configureChains, createConfig, WagmiConfig } from "wagmi";
 import {
-  polygon
-} from "wagmi/chains";
+  
+  mainnet,
+  polygon,
+  optimism,
+  arbitrum,
+  polygonMumbai,
+} from 'wagmi/chains';
 import { publicProvider } from "wagmi/providers/public";
 import { serverConfig } from "@/config/serverConfig";
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
-  [polygon],
-  [publicProvider()]
+  [mainnet, polygon, optimism, arbitrum, polygonMumbai],
+  [publicProvider()],
 );
 
 const projectId = serverConfig.ALCHEMY_API_KEY!;
@@ -57,7 +63,11 @@ export function Providers({ children }: { children: React.ReactNode }) {
   React.useEffect(() => setMounted(true), []);
   return (
     <WagmiConfig config={wagmiConfig}>
-      <RainbowKitProvider chains={chains} appInfo={demoAppInfo}>
+      <RainbowKitProvider
+        chains={chains}
+        theme={darkTheme()}
+        appInfo={demoAppInfo}
+      >
         {mounted && children}
       </RainbowKitProvider>
     </WagmiConfig>

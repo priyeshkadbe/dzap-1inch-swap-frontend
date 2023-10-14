@@ -22,11 +22,13 @@ const TokenSection: React.FC<TokenSectionProps> = ({
   linkPath,
   amount,
   onAmountChange,
-  disabled = false,
+  disabled ,
   placeholder,
   toAmount,
 }) => {
-  useEffect(() => {}, [token, amount, onAmountChange]);
+  useEffect(() => {
+    console.log("pk",toAmount,amount)
+  }, [token, amount, onAmountChange,toAmount]);
 
   return (
     <div className={style.container}>

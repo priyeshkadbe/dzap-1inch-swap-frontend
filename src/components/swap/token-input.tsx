@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { style } from "./style";
+import React, { useEffect } from 'react';
+import { style } from './style';
 
 interface TokenInputProps {
   value: number;
@@ -18,15 +18,18 @@ const TokenInput: React.FC<TokenInputProps> = ({
   loading,
   toAmount,
 }) => {
+  
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (onChange) {
       onChange(Number(e.target.value));
     }
   };
 
-  useEffect(() => {
-    
-  },[value,toAmount,loading])
+  useEffect(() => {}, [value, toAmount, loading]);
+
+  if (loading) {
+    return <p>loading</p>;
+  }
 
   return (
     <input

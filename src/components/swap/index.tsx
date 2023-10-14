@@ -1,42 +1,23 @@
-import { AiOutlinePlus, AiOutlineArrowDown } from "react-icons/ai";
-import { HiAdjustmentsHorizontal } from "react-icons/hi2";
-
-import { IoMdRefresh } from "react-icons/io";
-import {
-  BsFillArrowUpCircleFill,
-  BsFillArrowDownCircleFill,
-} from 'react-icons/bs';
-import { useTokenContext } from "@/context/TokenContext";
-import { useEffect } from "react";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { useAccount, useConnect, useDisconnect } from "wagmi";
-import { useFetchQuote } from "@/hooks/useFetchQuote";
-
-import GasFeeInfo from "./gas-fee-info";
-import { style } from "./style";
-import TokenSection from "./token-section";
-import SwapButton from "./swap-button";
-import {useSwapTokens} from "@/hooks/useSwapToken";
-import SwapHeader from "./swap-header";
-import { useFetchTokenPrice } from "@/hooks/useFetchTokenPrice";
-import Layout from "./layout";
+import { useTokenContext } from '@/context/TokenContext';
+import { useEffect } from 'react';
+import { useFetchQuote } from '@/hooks/useFetchQuote';
+import GasFeeInfo from './gas-fee-info';
+import TokenSection from './token-section';
+import SwapButton from './swap-button';
+import Header from './header';
+import Layout from './layout';
+import SwitchTokens from './switch-tokens';
 
 export default function Swap() {
   const {
-    tokens,
     sellingToken,
     buyingToken,
     setBuyingToken,
     sellingTokenAmount,
     setSellingTokenAmount,
     buyingTokenAmount,
-    gasFees,
+    setBuyingTokenAmount,
   } = useTokenContext();
-  let requestData = {
-    tokenIn: sellingToken?.address,
-    tokenOut: buyingToken?.address,
-    tokenInAmount: sellingTokenAmount.toString(),
-  };
 
   const { toAmount, gas, loading, error } = useFetchQuote({
     sellingToken,
@@ -44,23 +25,25 @@ export default function Swap() {
     sellingTokenAmount,
   });
 
- 
+  useEffect(() => {
+    setBuyingTokenAmount(toAmount!);
+    console.log('toamount', toAmount, gas, error);
+  }, [toAmount, gas, loading, error]);
 
   useEffect(() => {}, [
-    tokens,
     sellingToken,
     buyingToken,
-    setBuyingToken,
     sellingTokenAmount,
-    setSellingTokenAmount,
     buyingTokenAmount,
   ]);
 
-  const { address, isConnected } = useAccount();
+  // const { address, isConnected } = useAccount();
 
+  // const selling = useFetchTokenPrice(sellingToken?.address!);
+  // const buying = useFetchTokenPrice(buyingToken?.address!);
   return (
     <Layout>
-      <SwapHeader />
+      <Header />
       {/* You sell */}
       <TokenSection
         title="You sell"
@@ -71,16 +54,7 @@ export default function Swap() {
         placeholder="0"
         toAmount={toAmount}
       />
-
-      <button
-        className="flex justify-center absolute right-40 top-44  md:right-[210px]  md:top-1/3  transition-transform ease-in-out"
-      >
-        <AiOutlineArrowDown
-          size={60}
-          className="bg-[#191B1F] rounded-full p-4 transition-transform duration-300 ease-in-out transform hover:rotate-180 "
-        />
-      </button>
-
+      <SwitchTokens />
       <TokenSection
         title="You buy"
         token={buyingToken}
@@ -90,17 +64,17 @@ export default function Swap() {
         disabled
         placeholder="0"
       />
-      <GasFeeInfo
+      {/* <GasFeeInfo
         loading={loading}
         error={error}
         gas={gas}
         toAmount={toAmount}
-        sellingTokenName={sellingToken?.name}
+        sellingTokenSymbol={sellingToken?.symbol}
         sellingTokenAmount={sellingTokenAmount}
-        buyingTokenName={buyingToken?.name}
+        buyingTokenSymbol={buyingToken?.symbol}
         buyingTokenAmount={toAmount}
         decimal={buyingToken?.decimals}
-      />
+      /> */}
 
       <SwapButton />
     </Layout>

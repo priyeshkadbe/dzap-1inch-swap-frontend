@@ -4,7 +4,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Providers } from "./providers";
 import Navbar from "@/components/navbar/index";
-
+import  { Toaster } from 'react-hot-toast';
+import  { SWRConfig } from 'swr';
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -22,6 +23,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <Providers>
           <TokenProvider>
+            <Toaster />
             <Navbar />
             {children}
           </TokenProvider>

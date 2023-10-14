@@ -14,28 +14,31 @@ import TokenList from './token-list';
 import SearchInput from './search-input';
 import Header from './header';
 import Layout from './layout';
+import { route } from '@/api-routes/api-routes';
 
 interface TokenSelectorProps {
   onSelectToken: (token: Token) => void;
 }
 
+
 const TokenSelector: React.FC<TokenSelectorProps> = ({ onSelectToken }) => {
   const { tokens, loading, error } = useFetchTokens();
+
+
   const [searchInput, setSearchInput] = useState<string>('');
   const [filteredTokens, setFilteredTokens] = useState<Token[]>(tokens);
   const router = useRouter();
-
   useEffect(() => {
     setFilteredTokens(tokens);
   }, [tokens]);
 
-  useEffect(() => {}, [loading,tokens,error]);
+  useEffect(() => {}, [loading, tokens, error]);
 
   const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
     setSearchInput(value);
     const filtered = tokens.filter(
-      (token) =>
+      (token:any) =>
         token.name.toLowerCase().includes(value.toLowerCase()) ||
         token.symbol.toLowerCase().includes(value.toLowerCase()) ||
         token.address.toLowerCase().includes(value.toLowerCase()),
@@ -52,12 +55,10 @@ const TokenSelector: React.FC<TokenSelectorProps> = ({ onSelectToken }) => {
   return (
     <Layout>
       <Header />
-
       <SearchInput
         searchInput={searchInput}
         handleSearchChange={handleSearchChange}
       />
-
       <TokenList
         loading={loading}
         filteredTokens={filteredTokens}

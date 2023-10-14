@@ -10,9 +10,7 @@ interface FetchTokenPriceResponse {
   tokenPrice: TokenPrice | null;
 }
 
-export const useFetchTokenPrice = (
-  tokenAddress: string,
-): FetchTokenPriceResponse => {
+export const useFetchTokenPrice = (tokenAddress: string): FetchTokenPriceResponse => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [tokenPrice, setTokenPrice] = useState<TokenPrice | null>(null);

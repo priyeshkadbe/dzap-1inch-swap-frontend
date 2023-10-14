@@ -1,7 +1,10 @@
+import { route } from "@/api-routes/api-routes";
 import { useFetchTokenPrice } from "@/hooks/useFetchTokenPrice";
-import { Token } from "@/types";
-import React, { useEffect } from "react";
+import { Token, TokenPrice } from "@/types";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import {ThreeDots} from "react-loader-spinner"
+import TokenSection from "./token-section";
 
 interface TokenInfoProps {
   token: Token | null;
@@ -32,6 +35,33 @@ const TokenInfo: React.FC<TokenInfoProps> = ({ token }) => {
   //   );
   // }
 
+  // const [loading, setLoading] = useState<boolean>(true);
+  // const [error, setError] = useState<string | null>(null);
+  // const [tokenPrice, setTokenPrice] = useState<TokenPrice | null>(null);
+
+  // const fetchTokenPrice = async () => {
+  //   setLoading(true);
+  //   setError(null);
+  //   try {
+  //     const response = await axios.get(`${route.fetchToken}${token?.address}`);
+  //     console.log('response is ', response.data.data);
+  //     const [address, price] = Object.entries(response.data.data)[0];
+  //     const fetchedTokenPrice: TokenPrice = {
+  //       address: address,
+  //       price: price,
+  //     };
+  //     setTokenPrice(fetchedTokenPrice);
+  //   } catch (error) {
+  //     setError('Error fetching token price.');
+  //     console.error('Error fetching token price:', error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   fetchTokenPrice();
+  // },[token])
 
   return (
     <div className="flex justify-between">
@@ -60,7 +90,7 @@ const TokenInfo: React.FC<TokenInfoProps> = ({ token }) => {
 
       
         <div>
-          <h4 className="text-sm text-gray-500 capitalize">
+          <h4 className={`${tokenPrice?.price?"block":"hidden"} text-sm text-gray-500 capitalize`}>
             {'~'}
             {'$'}
             {Number(tokenPrice?.price).toFixed(4)}

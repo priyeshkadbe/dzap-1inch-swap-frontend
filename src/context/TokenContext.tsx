@@ -18,23 +18,26 @@ interface TokenPrice {
   address: string;
   price: any;
 }
-import useProvider  from 'wagmi';
+import useProvider from 'wagmi';
 import { useFetchTokens } from '@/hooks/useFetchTokens';
 import axios from 'axios';
 import { route } from '@/api-routes/api-routes';
-
+import useSWR from "swr"
 interface TokenContextProps {
   sellingToken: Token | null;
   setSellingToken: Dispatch<SetStateAction<Token | null>>;
   buyingToken: Token | null;
   setBuyingToken: Dispatch<SetStateAction<Token | null>>;
-  tokens: Token[];
-  sellingTokenPrice: TokenPrice | null;
-  buyingTokenPrice: TokenPrice | null;
+  //tokens: Token[];
+
+  //sellingTokenPrice: TokenPrice | null;
+  //buyingTokenPrice: TokenPrice | null;
   sellingTokenAmount: number;
   setSellingTokenAmount: Dispatch<SetStateAction<number>>;
   buyingTokenAmount: number | null;
-  gasFees: number;
+  setBuyingTokenAmount: Dispatch<SetStateAction<number>>;
+  //gasFees: number;
+  slippage: number;
 }
 
 const TokenContext = createContext<TokenContextProps | undefined>(undefined);
@@ -55,21 +58,22 @@ export const TokenProvider: React.FC<{ children: ReactNode }> = ({
   );
   const [sellingTokenAmount, setSellingTokenAmount] = useState<number>(0);
   const [buyingTokenAmount, setBuyingTokenAmount] = useState<number>(0);
-
+  const [slippage, setSlippage] = useState<number>(2.5);
   const { address, isConnecting, isDisconnected } = useAccount();
   const { chain, chains } = useNetwork();
-  const { data } = useBalance({
-  address
-})
+  // const { data } = useBalance({
+  //   address,
+  // });
+
+  const fetcher = (url: any) => fetch(url).then((res) => res.json());
+
+  const { data } = useSWR(route.fetchToken, fetcher);
+
+  console.log("dfa",data?.data?.tokens)
 
 
-  useEffect(() => {
-    console.log("chains", data?.formatted);
-    },[chain])
+  //setTokens(data)
 
-
-  // const tokensResponse = useFetchTokens();
-  // setTokens(tokensResponse.tokens);
   return (
     <TokenContext.Provider
       value={{
@@ -77,21 +81,20 @@ export const TokenProvider: React.FC<{ children: ReactNode }> = ({
         setSellingToken,
         buyingToken,
         setBuyingToken,
-        tokens,
-        sellingTokenPrice,
-        buyingTokenPrice,
+        // sellingTokenPrice,
+        // buyingTokenPrice,
         sellingTokenAmount,
         setSellingTokenAmount,
         buyingTokenAmount,
-        gasFees,
+        setBuyingTokenAmount,
+        // gasFees,
+        slippage,
       }}
     >
       {children}
     </TokenContext.Provider>
   );
 };
-
-
 
 export const useTokenContext = () => {
   const context = useContext(TokenContext);
