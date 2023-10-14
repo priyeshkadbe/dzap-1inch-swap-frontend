@@ -64,7 +64,7 @@ export default function Swap() {
         disabled
         placeholder="0"
       />
-      {/* <GasFeeInfo
+      <GasFeeInfo
         loading={loading}
         error={error}
         gas={gas}
@@ -74,7 +74,7 @@ export default function Swap() {
         buyingTokenSymbol={buyingToken?.symbol}
         buyingTokenAmount={toAmount}
         decimal={buyingToken?.decimals}
-      /> */}
+      />
 
       <SwapButton />
     </Layout>

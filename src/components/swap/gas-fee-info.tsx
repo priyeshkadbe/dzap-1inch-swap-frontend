@@ -41,11 +41,19 @@ const GasFeeInfo: React.FC<GasFeeInfoProps> = ({
     calculatedPrice,
   ]);
 
-  // let formattedGas
-  // if (gas !== null) {
-  //   formattedGas=ethers.formatUnits(gas);
-  // }
 
+
+
+
+  function convertWeiToMatic(gasFeeInWei: number) {
+  console.log("gad", ( gasFeeInWei / 10**18))
+  return( gasFeeInWei / 10**18);
+
+}
+
+
+  const gasFeeInMatic = convertWeiToMatic(gas!);
+  
   return (
     <>
       <div className={style.rateContainer}>
@@ -54,14 +62,15 @@ const GasFeeInfo: React.FC<GasFeeInfoProps> = ({
           <p className="text-sm text-gray-600">1 {sellingTokenSymbol}</p>
           <LiaEqualsSolid className={style.icon} size={16} />
           <p className="text-gray text-sm text-gray-600">
-            {calculatedPrice} {buyingTokenSymbol}
+            {calculatedPrice.toPrecision(4)} {buyingTokenSymbol}
           </p>
         </div>
         <div className="flex items-center gap-x-4  justify-center">
           <FaGasPump className="text-sm text-gray-600" />
           <div className="text-sm flex items-center text-gray-600">
             <TbTilde className="text-sm" />
-            {/* {formattedGas} */}
+            {gasFeeInMatic.toFixed(5)}
+            {'MATIC'}
           </div>
         </div>
       </div>
