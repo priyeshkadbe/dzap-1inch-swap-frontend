@@ -29,9 +29,9 @@ const SwapButton: React.FC = () => {
         },
       });
       
-      if (allowance.data.data.allowance) {
-        return;
-      }
+      // if (allowance.data.data.allowance) {
+      //   return;
+      // }
         console.log('allowance', allowance.data.data.allowance);
       const transaction = await axios.get(route.transaction, {
         params: {
