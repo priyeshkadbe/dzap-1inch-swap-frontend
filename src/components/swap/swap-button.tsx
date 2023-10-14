@@ -19,6 +19,22 @@ const SwapButton: React.FC = () => {
     data: null,
     value: null,
   });
+
+
+  const transaction=async()=>{
+    try {
+       const transaction = await axios.get(route.transaction, {
+         params: {
+           tokenAddress: sellingToken?.address,
+           amount: sellingTokenAmount!,
+         },
+       });
+       console.log('transaction', transaction);
+    } catch (error) {
+      console.log("error at transaction",error)
+    }
+  }
+
   const handleSwap = async () => {
     console.log('called');
     try {
@@ -28,20 +44,14 @@ const SwapButton: React.FC = () => {
           walletAddress: address,
         },
       });
-      
+       console.log('allowance', allowance.data.data.allowance);
       // if (allowance.data.data.allowance) {
       //   return;
       // }
-        console.log('allowance', allowance.data.data.allowance);
-      const transaction = await axios.get(route.transaction, {
-        params: {
-          tokenAddress: sellingToken?.address,
-          amount: sellingTokenAmount,
-        },
-      });
-      console.log('transaction', transaction.data);
+       transaction()
+      //setTxDetails(transaction.data.data);
     } catch (error) {
-      console.log('erroer', error);
+      console.log('erroer at allowance ', error);
     }
   };
 
