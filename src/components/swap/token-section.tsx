@@ -29,7 +29,7 @@ const TokenSection: React.FC<TokenSectionProps> = ({
   isLoading,
 }) => {
   useEffect(() => {
-    console.log('pk', toAmount, amount);
+  
   }, [token, amount, onAmountChange, toAmount]);
 
   return (
@@ -47,7 +47,7 @@ const TokenSection: React.FC<TokenSectionProps> = ({
             isLoading={isLoading}
           />
         </div>
-        <TokenInfo token={token}/>
+        <TokenInfo token={token} amount={amount} />
       </div>
     </div>
   );

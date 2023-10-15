@@ -6,8 +6,17 @@ export default function SwitchTokens() {
   const { buyingToken, sellingToken, buyingTokenAmount, sellingTokenAmount,
   setSellingToken,setBuyingToken,setSellingTokenAmount,setBuyingTokenAmount
   } = useTokenContext()
-
-  const handleSwitch = () => {
+  
+const handleSwitch = () => {
+  if (
+    sellingToken !== null &&
+    sellingToken !== undefined &&
+    buyingToken !== null &&
+    buyingToken !== undefined &&
+    buyingTokenAmount !== null &&
+    buyingTokenAmount !== undefined &&
+    buyingTokenAmount !== 0
+  ) {
     let token1 = sellingToken;
     let token2 = buyingToken;
     let amount = buyingTokenAmount;
@@ -16,6 +25,8 @@ export default function SwitchTokens() {
     setBuyingToken(token1);
     setSellingTokenAmount(amount!);
   }
+};
+
 
   return (
     <button

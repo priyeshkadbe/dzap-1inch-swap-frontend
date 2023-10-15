@@ -53,7 +53,7 @@ export default function Swap() {
         token={buyingToken}
         toAmount={data?.toAmount!}
         linkPath="/select-buying-token"
-        amount={data?.toAmount ?? 0}
+        amount={buyingTokenAmount??0}
         disabled
         placeholder="0"
         isLoading={isLoading}
@@ -68,7 +68,7 @@ export default function Swap() {
         sellingTokenSymbol={sellingToken?.symbol}
         sellingTokenAmount={sellingTokenAmount}
         buyingTokenSymbol={buyingToken?.symbol}
-        buyingTokenAmount={data?.toAmount!}
+        buyingTokenAmount={buyingTokenAmount!}
         decimal={buyingToken?.decimals}
       />
 
