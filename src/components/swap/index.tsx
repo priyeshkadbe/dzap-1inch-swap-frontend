@@ -1,46 +1,36 @@
-import { useTokenContext } from '@/context/TokenContext';
 import { useEffect } from 'react';
-import { useFetchQuote } from '@/hooks/useFetchQuote';
-import GasFeeInfo from './gas-fee-info';
-import TokenSection from './token-section';
-import SwapButton from './swap-button';
-import Header from './header';
 import Layout from './layout';
+import Header from './header';
+import TokenSection from './token-section';
 import SwitchTokens from './switch-tokens';
+import GasFeeInfo from './gas-fee-info';
+import { useTokenContext } from '@/context/TokenContext';
+import { useFetchQuote } from '@/hooks/useFetchQuote';
+import { toast } from 'react-hot-toast';
+import SwapButton from './swap-button';
 
 export default function Swap() {
   const {
     sellingToken,
     buyingToken,
-    setBuyingToken,
-    sellingTokenAmount,
-    setSellingTokenAmount,
-    buyingTokenAmount,
     setBuyingTokenAmount,
+    sellingTokenAmount,
+    buyingTokenAmount,
+    setSellingTokenAmount,
   } = useTokenContext();
 
-  const { toAmount, gas, loading, error } = useFetchQuote({
+  const { data, isLoading, error } = useFetchQuote(
     sellingToken,
     buyingToken,
     sellingTokenAmount,
-  });
+  );
 
   useEffect(() => {
-    setBuyingTokenAmount(toAmount!);
-    console.log('toamount', toAmount, gas, error);
-  }, [toAmount, gas, loading, error]);
+    if (data) {
+      setBuyingTokenAmount(data.toAmount);
+    }
+  }, [data, setBuyingTokenAmount]);
 
-  useEffect(() => {}, [
-    sellingToken,
-    buyingToken,
-    sellingTokenAmount,
-    buyingTokenAmount,
-  ]);
-
-  // const { address, isConnected } = useAccount();
-
-  // const selling = useFetchTokenPrice(sellingToken?.address!);
-  // const buying = useFetchTokenPrice(buyingToken?.address!);
   return (
     <Layout>
       <Header />
@@ -52,31 +42,37 @@ export default function Swap() {
         amount={sellingTokenAmount ?? 0}
         onAmountChange={setSellingTokenAmount}
         placeholder="0"
-        toAmount={toAmount}
+        toAmount={data?.toAmount!}
       />
+
       <SwitchTokens />
+
+      {/* You buy */}
       <TokenSection
         title="You buy"
         token={buyingToken}
+        toAmount={data?.toAmount!}
         linkPath="/select-buying-token"
-        amount={buyingTokenAmount ?? 0}
-        toAmount={toAmount}
+        amount={data?.toAmount ?? 0}
         disabled
         placeholder="0"
+        isLoading={isLoading}
       />
+
+      {/* Gas and Fee Info */}
       <GasFeeInfo
-        loading={loading}
-        error={error}
-        gas={gas}
-        toAmount={toAmount}
+        loading={isLoading}
+        error={error!}
+        gas={data?.gas!}
+        toAmount={data?.toAmount!}
         sellingTokenSymbol={sellingToken?.symbol}
         sellingTokenAmount={sellingTokenAmount}
         buyingTokenSymbol={buyingToken?.symbol}
-        buyingTokenAmount={toAmount}
+        buyingTokenAmount={data?.toAmount!}
         decimal={buyingToken?.decimals}
       />
 
-      <SwapButton />
+      <SwapButton/>
     </Layout>
   );
 }

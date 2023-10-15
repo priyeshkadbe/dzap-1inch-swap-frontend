@@ -14,6 +14,7 @@ interface TokenSectionProps {
   disabled?: boolean;
   placeholder: string;
   toAmount: number | null;
+  isLoading?:boolean;
 }
 
 const TokenSection: React.FC<TokenSectionProps> = ({
@@ -22,13 +23,14 @@ const TokenSection: React.FC<TokenSectionProps> = ({
   linkPath,
   amount,
   onAmountChange,
-  disabled ,
+  disabled,
   placeholder,
   toAmount,
+  isLoading,
 }) => {
   useEffect(() => {
-    console.log("pk",toAmount,amount)
-  }, [token, amount, onAmountChange,toAmount]);
+    console.log('pk', toAmount, amount);
+  }, [token, amount, onAmountChange, toAmount]);
 
   return (
     <div className={style.container}>
@@ -42,9 +44,10 @@ const TokenSection: React.FC<TokenSectionProps> = ({
             placeholder={placeholder}
             disabled={disabled}
             toAmount={toAmount}
+            isLoading={isLoading}
           />
         </div>
-        <TokenInfo token={token} />
+        <TokenInfo token={token}/>
       </div>
     </div>
   );

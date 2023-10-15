@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { style } from './style';
+import { ThreeDots } from 'react-loader-spinner';
 
 interface TokenInputProps {
   value: number;
@@ -7,7 +8,7 @@ interface TokenInputProps {
   onChange?: (value: number) => void;
   placeholder: string;
   disabled?: boolean;
-  loading?: boolean;
+  isLoading?: boolean;
 }
 
 const TokenInput: React.FC<TokenInputProps> = ({
@@ -15,20 +16,29 @@ const TokenInput: React.FC<TokenInputProps> = ({
   onChange,
   placeholder,
   disabled = false,
-  loading,
+  isLoading,
   toAmount,
 }) => {
-  
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (onChange) {
       onChange(Number(e.target.value));
     }
   };
 
-  useEffect(() => {}, [value, toAmount, loading]);
+  useEffect(() => {}, [value, toAmount, isLoading]);
 
-  if (loading) {
-    return <p>loading</p>;
+  if (isLoading && disabled && value !== 0) {
+    return (
+      <ThreeDots
+        height="30"
+        width="30"
+        radius="9"
+        color="#4fa94d"
+        ariaLabel="three-dots-loading"
+        wrapperStyle={{}}
+        visible={true}
+      />
+    );
   }
 
   return (

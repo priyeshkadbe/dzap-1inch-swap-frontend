@@ -1,58 +1,65 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
-import { useTokenContext } from '@/context/TokenContext';
-import { serverConfig } from '@/config/serverConfig';
 import { route } from '@/api-routes/api-routes';
 import { Token } from '@/types';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+import useSWR from 'swr';
 
-interface useFetchQuoteProps {
-  sellingToken: Token | null;
-  buyingToken: Token | null;
-  sellingTokenAmount: number | null;
+interface FetchQuoteResponse {
+  toAmount: number;
+  gas: number;
 }
 
-export const useFetchQuote = ({
-  sellingToken,
-  buyingToken,
-  sellingTokenAmount,
-}: useFetchQuoteProps) => {
-  const [toAmount, setToAmount] = useState<number | null>(null);
-  const [gas, setGas] = useState<number | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+export const useFetchQuote = (
+  sellingToken: Token | null,
+  buyingToken: Token | null,
+  sellingTokenAmount: number | null,
+) => {
+  const fetcher = async (url: string): Promise<FetchQuoteResponse> => {
+    try {
+      const response = await axios.get(url);
+      const { toAmount, gas } = response.data.data;
+      return { toAmount, gas };
+    } catch (error) {
+      throw new Error('Error calculating receiving token');
+    }
+  };
 
-  // const { sellingToken, buyingToken, sellingTokenAmount } = useTokenContext();
+  const shouldFetchData =
+    sellingToken !== null &&
+    sellingToken !== undefined &&
+    buyingToken !== null &&
+    buyingToken !== undefined &&
+    sellingTokenAmount !== null &&
+    sellingTokenAmount !== undefined &&
+    sellingTokenAmount !== 0;
+
+  const url = shouldFetchData
+    ? `${
+        route.getQuote
+      }?tokenIn=${sellingToken?.address}&tokenOut=${buyingToken?.address}&tokenInAmount=${sellingTokenAmount.toString()}`
+    : null;
+
+  const { data, error } = useSWR<FetchQuoteResponse>(url, fetcher, {
+    revalidateOnFocus: true, // Revalidate the SWR key when the window gains focus
+    refreshInterval: 5000, // Refresh the data every 5 seconds (optional)
+  });
+
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (
-      sellingToken !== null &&
-      sellingTokenAmount !== null &&
-      buyingToken !== null
-    ) {
-      let requestData = {
-        tokenIn: sellingToken?.address,
-        tokenOut: buyingToken?.address,
-        tokenInAmount: sellingTokenAmount.toString(),
-      };
+    let mounted = true;
 
-      const fetchData = async () => {
-        try {
-          const response = await axios.get(route.getQuote, {
-            params: requestData,
-          });
-          const { toAmount, gas } = response.data.data;
-          setToAmount(toAmount);
-          setGas(gas);
-          setLoading(false);
-        } catch (error) {
-          console.error('Error calculating receiving token:', error);
-          setError('An error occurred while calculating receiving token.');
-          setLoading(false);
-        }
-      };
-      fetchData();
-    }
-  }, [sellingToken, buyingToken, sellingTokenAmount]);
+    const delay = setTimeout(() => {
+      if (mounted) {
+        setIsLoading(false);
+      }
+    }, 1000);
 
-  return { toAmount, gas, loading, error };
+    return () => {
+      mounted = false;
+      clearTimeout(delay);
+    };
+  }, []); // This effect runs once and clears the loading state after 1 second
+
+  return { data, isLoading, error };
 };

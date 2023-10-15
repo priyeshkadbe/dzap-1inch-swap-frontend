@@ -20,13 +20,16 @@ interface TokenSelectorProps {
   onSelectToken: (token: Token) => void;
 }
 
-
 const TokenSelector: React.FC<TokenSelectorProps> = ({ onSelectToken }) => {
   const { tokens, loading, error } = useFetchTokens();
 
+  
+  useEffect(() => {
+    console.log("tokens",tokens);
+  }, [tokens]);
 
   const [searchInput, setSearchInput] = useState<string>('');
-  const [filteredTokens, setFilteredTokens] = useState<Token[]>(tokens);
+  const [filteredTokens, setFilteredTokens] = useState<Token[]>([]);
   const router = useRouter();
   useEffect(() => {
     setFilteredTokens(tokens);
@@ -38,7 +41,7 @@ const TokenSelector: React.FC<TokenSelectorProps> = ({ onSelectToken }) => {
     const { value } = event.target;
     setSearchInput(value);
     const filtered = tokens.filter(
-      (token:any) =>
+      (token: any) =>
         token.name.toLowerCase().includes(value.toLowerCase()) ||
         token.symbol.toLowerCase().includes(value.toLowerCase()) ||
         token.address.toLowerCase().includes(value.toLowerCase()),

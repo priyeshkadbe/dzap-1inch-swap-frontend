@@ -57,7 +57,11 @@ const GasFeeInfo: React.FC<GasFeeInfoProps> = ({
   return (
     <>
       <div className={style.rateContainer}>
-        <div className="flex items-center justify-between">
+        <div
+          className={`flex items-center justify-between ${
+            gas === null || (undefined && 'hidden')
+          }`}
+        >
           <AiOutlineInfoCircle className={style.icon} size={12} />
           <p className="text-sm text-gray-600">1 {sellingTokenSymbol}</p>
           <LiaEqualsSolid className={style.icon} size={16} />
@@ -65,7 +69,11 @@ const GasFeeInfo: React.FC<GasFeeInfoProps> = ({
             {calculatedPrice.toPrecision(4)} {buyingTokenSymbol}
           </p>
         </div>
-        <div className="flex items-center gap-x-4  justify-center">
+        <div
+          className={`flex items-center gap-x-4  justify-center ${
+            gas === null || (undefined && 'hidden')
+          }`}
+        >
           <FaGasPump className="text-sm text-gray-600" />
           <div className="text-sm flex items-center text-gray-600">
             <TbTilde className="text-sm" />
