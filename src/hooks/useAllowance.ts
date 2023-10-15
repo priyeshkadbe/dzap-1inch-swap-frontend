@@ -16,7 +16,9 @@ const useAllowance = (
 ) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<AllowanceResponse['error']>(null);
-  const [allowanceData, setAllowanceData] = useState<AllowanceResponse['data'] | null>(null);
+  const [allowanceData, setAllowanceData] = useState<
+    AllowanceResponse['data'] | null
+  >(null);
 
   useEffect(() => {
     const fetchAllowance = async () => {
@@ -45,7 +47,7 @@ const useAllowance = (
 
     fetchAllowance();
 
-    // Cleanup function if needed (e.g., cancelling API request)
+    // Cleanup function 
     // return () => {
     //   cleanup logic here
     // };

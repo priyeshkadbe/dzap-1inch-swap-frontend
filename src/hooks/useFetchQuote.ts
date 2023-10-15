@@ -40,8 +40,8 @@ export const useFetchQuote = (
     : null;
 
   const { data, error } = useSWR<FetchQuoteResponse>(url, fetcher, {
-    revalidateOnFocus: true, // Revalidate the SWR key when the window gains focus
-    refreshInterval: 5000, // Refresh the data every 5 seconds (optional)
+    revalidateOnFocus: true, 
+    refreshInterval: 5000,
   });
 
   const [isLoading, setIsLoading] = useState(true);
@@ -59,7 +59,7 @@ export const useFetchQuote = (
       mounted = false;
       clearTimeout(delay);
     };
-  }, []); // This effect runs once and clears the loading state after 1 second
+  }, []); 
 
   return { data, isLoading, error };
 };

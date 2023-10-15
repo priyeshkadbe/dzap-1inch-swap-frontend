@@ -20,7 +20,7 @@ const TokenInfo: React.FC<TokenInfoProps> = ({ token, amount }) => {
   const [isLoadingNewData, setIsLoadingNewData] = useState<boolean>(false);
 
   const { data, isValidating } = useSWR(
-    token && amount!==0 ? `${route.fetchToken}${token.address!}` : null,
+    token && amount !== 0 ? `${route.fetchToken}${token.address!}` : null,
     fetcher,
     {
       revalidateOnFocus: false,
@@ -59,35 +59,7 @@ const TokenInfo: React.FC<TokenInfoProps> = ({ token, amount }) => {
           />
         </div>
       )}
-
-      {/* {amount === 0 && (
-        <div>
-          <h4 className={`text-sm text-gray-500 capitalize `}>
-            {'~'}
-            {'$'}
-            {amount}
-          </h4>
-        </div>
-      )} */}
-
-      <div
-        className={`${
-          data !== null &&
-          data !== undefined &&
-          !isValidating &&
-          !isLoadingNewData
-            ? 'flex'
-            : 'hidden'
-        }`}
-      >
-        <h4 className={`text-sm text-gray-500 capitalize `}>
-          {'~'}
-          {'$'}
-          {(Number(data) * amount ).toString()}
-        </h4>
-      </div>
-
-      {/* {data !== null &&
+      {data !== null &&
         data !== undefined &&
         !isValidating &&
         !isLoadingNewData && (
@@ -98,7 +70,7 @@ const TokenInfo: React.FC<TokenInfoProps> = ({ token, amount }) => {
               {(Number(data) * amount ?? 0).toString()}
             </h4>
           </div>
-        )} */}
+        )}
     </div>
   );
 };
