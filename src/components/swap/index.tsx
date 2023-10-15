@@ -29,7 +29,14 @@ export default function Swap() {
     if (data) {
       setBuyingTokenAmount(data.toAmount);
     }
-  }, [data, setBuyingTokenAmount]);
+  }, [data]);
+
+  useEffect(() => {}, [
+    sellingToken,
+    buyingToken,
+    sellingTokenAmount,
+    buyingTokenAmount,
+  ]);
 
   return (
     <Layout>
@@ -53,7 +60,7 @@ export default function Swap() {
         token={buyingToken}
         toAmount={data?.toAmount!}
         linkPath="/select-buying-token"
-        amount={buyingTokenAmount??0}
+        amount={buyingTokenAmount ?? 0}
         disabled
         placeholder="0"
         isLoading={isLoading}
@@ -72,7 +79,7 @@ export default function Swap() {
         decimal={buyingToken?.decimals}
       />
 
-      <SwapButton/>
+      <SwapButton />
     </Layout>
   );
 }
