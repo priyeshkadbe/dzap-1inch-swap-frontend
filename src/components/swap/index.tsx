@@ -8,7 +8,8 @@ import { useTokenContext } from '@/context/TokenContext';
 import { useFetchQuote } from '@/hooks/useFetchQuote';
 import { toast } from 'react-hot-toast';
 import SwapButton from './swap-button';
-
+import { etherUnits } from 'viem';
+import {ethers} from "ethers"
 export default function Swap() {
   const {
     sellingToken,
@@ -22,12 +23,13 @@ export default function Swap() {
   const { data, isLoading, error } = useFetchQuote(
     sellingToken,
     buyingToken,
-    sellingTokenAmount,
+    Number(ethers.parseEther(sellingTokenAmount.toString())),
   );
 
   useEffect(() => {
     if (data) {
-      setBuyingTokenAmount(data.toAmount);
+      console.log("data",data.toAmount)
+      setBuyingTokenAmount(Number(ethers.formatEther(data.toAmount!)));
     }
   }, [data]);
 
@@ -42,35 +44,43 @@ export default function Swap() {
     <Layout>
       <Header />
       {/* You sell */}
-      <TokenSection
-        title="You sell"
-        token={sellingToken}
-        linkPath="/select-selling-token"
-        amount={sellingTokenAmount ?? 0}
-        onAmountChange={setSellingTokenAmount}
-        placeholder="0"
-        toAmount={data?.toAmount!}
-      />
+      <div className='relative flex flex-col'>
+        <TokenSection
+          title="You sell"
+          token={sellingToken}
+          linkPath="/select-selling-token"
+          amount={sellingTokenAmount ?? 0}
+          onAmountChange={setSellingTokenAmount}
+          placeholder="0"
+          toAmount={buyingTokenAmount}
+        />
 
-      <SwitchTokens />
+        <SwitchTokens />
 
-      {/* You buy */}
-      <TokenSection
-        title="You buy"
-        token={buyingToken}
-        toAmount={data?.toAmount!}
-        linkPath="/select-buying-token"
-        amount={buyingTokenAmount ?? 0}
-        disabled
-        placeholder="0"
-        isLoading={isLoading}
-      />
+        {/* You buy */}
+        <TokenSection
+          title="You buy"
+          token={buyingToken}
+          toAmount={Number(
+            Number(ethers.formatEther(BigInt(data?.toAmount ?? 0))).toFixed(14),
+          )}
+          linkPath="/select-buying-token"
+          amount={Number(
+            Number(ethers.formatEther(BigInt(data?.toAmount ?? 0))).toFixed(8),
+          )}
+          disabled
+          placeholder="0"
+          isLoading={isLoading}
+        />
+      </div>
 
       {/* Gas and Fee Info */}
       <GasFeeInfo
         loading={isLoading}
         error={error!}
-        gas={data?.gas!}
+        gas={Number(
+          Number(ethers.formatEther(BigInt(data?.gas ?? 0))).toPrecision(12),
+        )}
         toAmount={data?.toAmount!}
         sellingTokenSymbol={sellingToken?.symbol}
         sellingTokenAmount={sellingTokenAmount}

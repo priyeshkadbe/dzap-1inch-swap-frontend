@@ -30,13 +30,13 @@ const handleSwitch = () => {
 
   return (
     <button
-      className="flex justify-center  transition-transform ease-in-out -my-2"
+      className="flex justify-center rounded-full items-center absolute right-[42%] top-[44%]   transition-transform ease-in-out -my-2"
       aria-label="Switch Tokens"
       onClick={() => handleSwitch()}
     >
       <AiOutlineArrowDown
         size={60}
-        className="bg-[#20242A] rounded-full p-4 transition-transform duration-300 ease-in-out transform hover:rotate-180 "
+        className="bg-[#191B1F] rounded-full p-4 transition-transform duration-300 ease-in-out transform hover:rotate-180 "
       />
     </button>
   );

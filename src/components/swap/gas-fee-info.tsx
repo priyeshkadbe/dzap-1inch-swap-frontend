@@ -1,12 +1,12 @@
-import React, { useEffect } from "react";
-import { AiOutlineInfoCircle } from "react-icons/ai";
-import { FaGasPump } from "react-icons/fa";
-import { LiaEqualsSolid } from "react-icons/lia";
-import { TbTilde } from "react-icons/tb";
-import { style } from "./style";
-import { useFetchQuote } from "@/hooks/useFetchQuote";
+import React, { useEffect } from 'react';
+import { AiOutlineInfoCircle } from 'react-icons/ai';
+import { FaGasPump } from 'react-icons/fa';
+import { LiaEqualsSolid } from 'react-icons/lia';
+import { TbTilde } from 'react-icons/tb';
+import { style } from './style';
+import { useFetchQuote } from '@/hooks/useFetchQuote';
 // import {gasFeeFormatter} from '@/helper/gas-fee-formatter';
-import {ethers} from "ethers"
+import { ethers } from 'ethers';
 interface GasFeeInfoProps {
   loading: boolean;
   error: string | null;
@@ -42,18 +42,6 @@ const GasFeeInfo: React.FC<GasFeeInfoProps> = ({
   ]);
 
 
-
-
-
-  function convertWeiToMatic(gasFeeInWei: number) {
-  console.log("gad", ( gasFeeInWei / 10**18))
-  return( gasFeeInWei / 10**18);
-
-}
-
-
-  const gasFeeInMatic = convertWeiToMatic(gas!);
-  
   return (
     <>
       <div className={style.rateContainer}>
@@ -70,14 +58,14 @@ const GasFeeInfo: React.FC<GasFeeInfoProps> = ({
           </p>
         </div>
         <div
-          className={`flex items-center gap-x-4  justify-center ${
+          className={`flex items-center gap-x-4   ${
             gas === null || (undefined && 'hidden')
           }`}
         >
           <FaGasPump className="text-sm text-gray-600" />
           <div className="text-sm flex items-center text-gray-600">
-            <TbTilde className="text-sm" />
-            {gasFeeInMatic.toFixed(5)}
+            <TbTilde className="text-xsm" />
+            {Number(gas).toFixed(16)}
             {'MATIC'}
           </div>
         </div>

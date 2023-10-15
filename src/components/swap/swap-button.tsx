@@ -8,7 +8,9 @@ import ContractABI from '../../../abi/swap.json';
 import { parseEther } from 'viem';
 import axios from 'axios';
 import {
+  Connector,
   useAccount,
+  useConnect,
   useContractWrite,
   usePrepareContractWrite,
   useSendTransaction,
@@ -17,6 +19,7 @@ import {
 import { useTokenContext } from '@/context/TokenContext';
 import { route } from '@/api-routes/api-routes';
 import toast, { Toaster } from 'react-hot-toast';
+import { FaSpinner } from 'react-icons/fa';
 
 const SwapButton: React.FC = () => {
   const { buyingToken, sellingToken, sellingTokenAmount } = useTokenContext();
@@ -175,9 +178,11 @@ const SwapButton: React.FC = () => {
   //   }
   // };
 
+  const { connectors, connect,error,isLoading,isSuccess,pendingConnector } = useConnect();
+
   return (
     <div>
-      {isConnected ? (
+      {/* {isConnected ? (
         <button
           className={style.button}
           onClick={() => {
@@ -190,6 +195,37 @@ const SwapButton: React.FC = () => {
         <div className="flex justify-center">
           <ConnectButton />
         </div>
+      )} */}
+      {/* <button
+        className={style.button}
+        onClick={() => {
+          swap();
+        }}
+      >
+        <p className="text-md text-white">swap</p>
+      </button> */}
+      {!isConnected ? (
+        connectors.map((connector) => (
+          <button
+            className={style.button}
+            key={connector.id}
+            onClick={() => connect({ connector })}
+          >
+            <p className="text-md text-white">Connect Wallet</p>
+            {isLoading && connector.id === pendingConnector?.id && (
+              <FaSpinner className="animate-spin" />
+            )}
+          </button>
+        ))
+      ) : (
+        <button
+          className={style.button}
+          onClick={() => {
+            swap();
+          }}
+        >
+          <p className="text-md text-white">swap</p>
+        </button>
       )}
     </div>
   );

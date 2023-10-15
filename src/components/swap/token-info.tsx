@@ -67,7 +67,7 @@ const TokenInfo: React.FC<TokenInfoProps> = ({ token, amount }) => {
             <h4 className={`text-sm text-gray-500 capitalize `}>
               {'~'}
               {'$'}
-              {(Number(data) * amount ?? 0).toString()}
+              {Number(Number(data) * amount ?? 0)}
             </h4>
           </div>
         )}

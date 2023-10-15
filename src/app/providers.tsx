@@ -13,6 +13,7 @@ import {
   argentWallet,
   trustWallet,
   ledgerWallet,
+  metaMaskWallet
 } from "@rainbow-me/rainbowkit/wallets";
 import { configureChains, createConfig, WagmiConfig } from "wagmi";
 import {
@@ -27,7 +28,7 @@ import { publicProvider } from "wagmi/providers/public";
 import { serverConfig } from "@/config/serverConfig";
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
-  [mainnet, polygon, optimism, arbitrum, polygonMumbai],
+  [polygon,  polygonMumbai],
   [publicProvider()],
 );
 
@@ -43,11 +44,22 @@ const demoAppInfo = {
   appName: "Swapping App",
 };
 
+// const connectors = connectorsForWallets([
+//   ...wallets,
+//   {
+//     groupName: "Other",
+//     wallets: [],
+//   },
+// ]);
+
+
 const connectors = connectorsForWallets([
-  ...wallets,
   {
-    groupName: "Other",
-    wallets: [],
+    groupName: 'Recommended',
+    wallets: [metaMaskWallet({
+      projectId,
+      chains
+    })],
   },
 ]);
 
