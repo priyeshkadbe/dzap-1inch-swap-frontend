@@ -1,29 +1,19 @@
-'use client';
-
+"use client";
 import React, {
   createContext,
   ReactNode,
   useContext,
   useState,
+  useEffect,
   Dispatch,
   SetStateAction,
-  useEffect,
 } from 'react';
 
-import { useAccount, useNetwork } from 'wagmi';
-import { Token } from '@/types';
-import { useBalance } from 'wagmi';
-
-interface TokenPrice {
-  address: string;
-  price: any;
-}
-import useProvider from 'wagmi';
-import { useFetchTokens } from '@/hooks/useFetchTokens';
 import axios from 'axios';
-import { route } from '@/api-routes/api-routes';
 import useSWR from 'swr';
-
+import { useAccount, useNetwork, useBalance } from 'wagmi';
+import { Token } from '@/types';
+import { route } from '@/api-routes/api-routes';
 
 
 interface TokenContextProps {
@@ -34,7 +24,7 @@ interface TokenContextProps {
   tokens: Token[] | null;
   sellingTokenAmount: number;
   setSellingTokenAmount: Dispatch<SetStateAction<number>>;
-  buyingTokenAmount: number | null;
+  buyingTokenAmount: number;
   setBuyingTokenAmount: Dispatch<SetStateAction<number>>;
   slippage: number;
 }
@@ -46,47 +36,31 @@ export const TokenProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const [sellingToken, setSellingToken] = useState<Token | null>(null);
   const [buyingToken, setBuyingToken] = useState<Token | null>(null);
-  const [tokens, setTokens] = useState<Token[]>([]);
-  const [sellingTokenPrice, setSellingTokenPrice] = useState<TokenPrice | null>(
-    null,
-  );
-
-
-  const [buyingTokenPrice, setBuyingTokenPrice] = useState<TokenPrice | null>(
-    null,
-  );
+  const [tokens, setTokens] = useState<Token[] | null>(null);
   const [sellingTokenAmount, setSellingTokenAmount] = useState<number>(0);
   const [buyingTokenAmount, setBuyingTokenAmount] = useState<number>(0);
   const [slippage, setSlippage] = useState<number>(2.5);
 
-  
-  const fetcher = async (url:any) => {
+  const fetchTokens = async () => {
     try {
-      const response = await axios.get(url);
+      const response = await axios.get(route.fetchToken);
       const tokenData = response.data.data.tokens;
-
-      const tokenArray: Token[] = [];
-       for (const key in tokenData) {
-         if (tokenData.hasOwnProperty(key)) {
-           tokenArray.push(tokenData[key]);
-         }
-       }
-      return tokenArray;
+      const tokenArray: Token[] = Object.values(tokenData);
+      setTokens(tokenArray);
     } catch (error) {
-      console.log('Error fetching data: ' ,error);
+      console.error('Error fetching data:', error);
     }
   };
 
-  const { data } = useSWR(route.fetchToken, fetcher, {
-    revalidateOnMount: true, 
+  const { data } = useSWR(route.fetchToken, fetchTokens, {
+    revalidateOnMount: true,
   });
 
-
   useEffect(() => {
-    setTokens(data!);
-  },[data])
-
-  //setTokens(data)
+    if (data) {
+      setTokens(data);
+    }
+  }, [data]);
 
   return (
     <TokenContext.Provider

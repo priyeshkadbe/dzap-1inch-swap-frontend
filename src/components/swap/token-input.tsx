@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import { style } from './style';
 import { ThreeDots } from 'react-loader-spinner';
-import {formatEther} from "viem"
+import {formatEther, parseEther} from "viem"
+import formatNumber from '@/utils/format-number';
 interface TokenInputProps {
   value: number;
   toAmount: number ;
@@ -21,7 +22,8 @@ const TokenInput: React.FC<TokenInputProps> = ({
 }) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (onChange) {
-      onChange(Number(e.target.value));
+      // onChange(Number(formatEther(BigInt(Number(e.target.value)))));
+      onChange(Number(e.target.value))
     }
   };
 
@@ -53,7 +55,7 @@ const TokenInput: React.FC<TokenInputProps> = ({
   // );
 
 
-  if (isLoading && disabled && value !== 0) {
+  if (isLoading && disabled) {
     return (
       <ThreeDots
         height="30"
@@ -65,13 +67,13 @@ const TokenInput: React.FC<TokenInputProps> = ({
         visible={true}
       />
     );
-  } else if (disabled && value) {
+  } else if (disabled && toAmount) {
     return (
       <input
-        type="number"
+        type="string"
         placeholder={placeholder}
         className={style.input}
-        value={Math.round(parseFloat(value.toString()) * 1e12)}
+        value={formatNumber(toAmount)}
         // onChange={handleChange}
         disabled={disabled}
       />
@@ -79,10 +81,10 @@ const TokenInput: React.FC<TokenInputProps> = ({
   } else {
     return (
       <input
-        type="number"
+        type="string"
         placeholder={placeholder}
         className={style.input}
-        value={value}
+        value={(value)}
         onChange={handleChange}
         // disabled={disabled}
       />

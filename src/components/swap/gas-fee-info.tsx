@@ -8,6 +8,7 @@ import { useFetchQuote } from '@/hooks/useFetchQuote';
 // import {gasFeeFormatter} from '@/helper/gas-fee-formatter';
 import { ethers } from 'ethers';
 import formatNumber from '@/utils/format-number';
+
 interface GasFeeInfoProps {
   loading: boolean;
   error: string | null;
@@ -46,19 +47,19 @@ const GasFeeInfo: React.FC<GasFeeInfoProps> = ({
     <>
       <div className={style.rateContainer}>
         <div
-          className={`flex  items-center justify-start ${
+          className={`flex  items-center justify-center gap-x-4 py-2  ${
             gas === null || (undefined && 'hidden')
           }`}
         >
-          <AiOutlineInfoCircle className={style.icon} size={12} />
+          <AiOutlineInfoCircle className={style.icon} size={18} />
           <p className="text-sm text-gray-600">1 {sellingTokenSymbol}</p>
           {/* <LiaEqualsSolid className={style.icon} size={16} /> */}
           <p className="text-gray text-sm text-gray-600">
-            ={formatNumber(calculatedPrice)} {buyingTokenSymbol}
+            = { "  "} {formatNumber(calculatedPrice)} {buyingTokenSymbol}
           </p>
         </div>
         <div
-          className={`flex items-center gap-x-4   ${
+          className={`flex items-center justify-center gap-x-4   ${
             gas === null || (undefined && 'hidden')
           }`}
         >

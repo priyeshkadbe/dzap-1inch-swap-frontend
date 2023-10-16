@@ -10,6 +10,7 @@ import { toast } from 'react-hot-toast';
 import SwapButton from './swap-button';
 import { etherUnits, formatEther, parseEther } from 'viem';
 import { ethers } from 'ethers';
+import formatNumber from '@/utils/format-number';
 export default function Swap() {
   const {
     sellingToken,
@@ -26,20 +27,9 @@ export default function Swap() {
     Number(parseEther(sellingTokenAmount.toString())),
   );
 
-  // useEffect(() => {
-  //   if (data) {
-  //     console.log('data', data.toAmount);
-  //     //setBuyingTokenAmount(Number(ethers.utils(data.toAmount!)));
-  //     setBuyingTokenAmount(Number(formatEther(BigInt(data.toAmount!))));
-  //   }
-  // }, [data]);
-
   useEffect(() => {
-
     if (data) {
-      //console.log('data', data.toAmount);
-      //setBuyingTokenAmount(Number(ethers.utils(data.toAmount!)));
-      setBuyingTokenAmount(Number(formatEther(BigInt(data.toAmount!))));
+      setBuyingTokenAmount(Number(formatEther(BigInt(data.toAmount))));
     }
   }, [
     sellingToken,
@@ -47,7 +37,7 @@ export default function Swap() {
     sellingTokenAmount,
     buyingTokenAmount,
     data,
-    setBuyingTokenAmount
+    setBuyingTokenAmount,
   ]);
 
   return (
@@ -65,20 +55,16 @@ export default function Swap() {
           toAmount={buyingTokenAmount}
         />
 
+        {/* Switch the Tokens */}
         <SwitchTokens />
 
         {/* You buy */}
         <TokenSection
           title="You buy"
           token={buyingToken}
-          // toAmount={Number(
-          //   Number(
-          //     ethers.utils.formatEther(BigInt(data?.toAmount ?? 0)),
-          //   ).toFixed(14),
-          // )}
-          toAmount={Number(buyingTokenAmount?.toPrecision(6))!}
+          toAmount={buyingTokenAmount}
           linkPath="/select-buying-token"
-          amount={Number(buyingTokenAmount?.toPrecision(6))!}
+          amount={buyingTokenAmount}
           disabled
           placeholder="0"
           isLoading={isLoading}
@@ -89,10 +75,6 @@ export default function Swap() {
       <GasFeeInfo
         loading={isLoading}
         error={error!}
-        // gas={Number(
-        //   Number(ethers.utils.formatEther(BigInt(data?.gas ?? 0))).toPrecision(12),
-        // )}
-        //gas={Number(parseEther(data?.gas.toString(),{"unit":"wei"})}
         gas={Number(formatEther(BigInt(data?.gas! ?? 0)))}
         toAmount={buyingTokenAmount!}
         sellingTokenSymbol={sellingToken?.symbol}
