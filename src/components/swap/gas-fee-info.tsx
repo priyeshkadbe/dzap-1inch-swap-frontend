@@ -46,15 +46,15 @@ const GasFeeInfo: React.FC<GasFeeInfoProps> = ({
     <>
       <div className={style.rateContainer}>
         <div
-          className={`flex items-center justify-between ${
+          className={`flex  items-center justify-start ${
             gas === null || (undefined && 'hidden')
           }`}
         >
           <AiOutlineInfoCircle className={style.icon} size={12} />
           <p className="text-sm text-gray-600">1 {sellingTokenSymbol}</p>
-          <LiaEqualsSolid className={style.icon} size={16} />
+          {/* <LiaEqualsSolid className={style.icon} size={16} /> */}
           <p className="text-gray text-sm text-gray-600">
-            {formatNumber(calculatedPrice)} {buyingTokenSymbol}
+            ={formatNumber(calculatedPrice)} {buyingTokenSymbol}
           </p>
         </div>
         <div
