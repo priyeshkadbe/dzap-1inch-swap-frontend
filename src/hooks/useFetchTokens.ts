@@ -15,7 +15,7 @@ export const useFetchTokens = () => {
     data,
     error,
     isValidating: loading,
-  } = useSWR(route.fetchToken, fetcher);
+  } = useSWR(route.fetchToken, fetcher, { revalidateOnMount: true });
 
   const fetchData = async () => {
     try {

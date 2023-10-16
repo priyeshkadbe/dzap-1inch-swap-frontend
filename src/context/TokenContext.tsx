@@ -22,21 +22,20 @@ import useProvider from 'wagmi';
 import { useFetchTokens } from '@/hooks/useFetchTokens';
 import axios from 'axios';
 import { route } from '@/api-routes/api-routes';
-import useSWR from "swr"
+import useSWR from 'swr';
+
+
+
 interface TokenContextProps {
   sellingToken: Token | null;
   setSellingToken: Dispatch<SetStateAction<Token | null>>;
   buyingToken: Token | null;
   setBuyingToken: Dispatch<SetStateAction<Token | null>>;
-  //tokens: Token[];
-
-  //sellingTokenPrice: TokenPrice | null;
-  //buyingTokenPrice: TokenPrice | null;
+  tokens: Token[] | null;
   sellingTokenAmount: number;
   setSellingTokenAmount: Dispatch<SetStateAction<number>>;
   buyingTokenAmount: number | null;
   setBuyingTokenAmount: Dispatch<SetStateAction<number>>;
-  //gasFees: number;
   slippage: number;
 }
 
@@ -52,25 +51,40 @@ export const TokenProvider: React.FC<{ children: ReactNode }> = ({
     null,
   );
 
-  const [gasFees, setGasFees] = useState(0);
+
   const [buyingTokenPrice, setBuyingTokenPrice] = useState<TokenPrice | null>(
     null,
   );
   const [sellingTokenAmount, setSellingTokenAmount] = useState<number>(0);
   const [buyingTokenAmount, setBuyingTokenAmount] = useState<number>(0);
   const [slippage, setSlippage] = useState<number>(2.5);
-  const { address, isConnecting, isDisconnected } = useAccount();
-  const { chain, chains } = useNetwork();
-  // const { data } = useBalance({
-  //   address,
-  // });
 
-  const fetcher = (url: any) => fetch(url).then((res) => res.json());
+  
+  const fetcher = async (url:any) => {
+    try {
+      const response = await axios.get(url);
+      const tokenData = response.data.data.tokens;
 
-  const { data } = useSWR(route.fetchToken, fetcher);
+      const tokenArray: Token[] = [];
+       for (const key in tokenData) {
+         if (tokenData.hasOwnProperty(key)) {
+           tokenArray.push(tokenData[key]);
+         }
+       }
+      return tokenArray;
+    } catch (error) {
+      console.log('Error fetching data: ' ,error);
+    }
+  };
 
-  console.log("dfa",data?.data?.tokens)
+  const { data } = useSWR(route.fetchToken, fetcher, {
+    revalidateOnMount: true, 
+  });
 
+
+  useEffect(() => {
+    setTokens(data!);
+  },[data])
 
   //setTokens(data)
 
@@ -81,13 +95,11 @@ export const TokenProvider: React.FC<{ children: ReactNode }> = ({
         setSellingToken,
         buyingToken,
         setBuyingToken,
-        // sellingTokenPrice,
-        // buyingTokenPrice,
+        tokens,
         sellingTokenAmount,
         setSellingTokenAmount,
         buyingTokenAmount,
         setBuyingTokenAmount,
-        // gasFees,
         slippage,
       }}
     >

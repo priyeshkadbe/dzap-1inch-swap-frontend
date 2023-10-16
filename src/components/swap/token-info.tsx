@@ -4,6 +4,7 @@ import useSWR, { mutate } from 'swr';
 import axios from 'axios';
 import { route } from '@/api-routes/api-routes';
 import { Token } from '@/types';
+import formatNumber from '@/utils/format-number';
 
 const fetcher = async (url: string) => {
   const response = await axios.get(url);
@@ -25,11 +26,13 @@ const TokenInfo: React.FC<TokenInfoProps> = ({ token, amount }) => {
     {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
-      refreshInterval: 5000, // Set refresh interval to 15 seconds
+      refreshInterval: 5000,
       onError: () => {
         setIsLoadingNewData(false);
       },
+      
     },
+    
   );
 
   useEffect(() => {
@@ -67,7 +70,7 @@ const TokenInfo: React.FC<TokenInfoProps> = ({ token, amount }) => {
             <h4 className={`text-sm text-gray-500 capitalize `}>
               {'~'}
               {'$'}
-              {Number(Number(data) * amount ?? 0)}
+              {formatNumber(Number(data) * amount)}
             </h4>
           </div>
         )}

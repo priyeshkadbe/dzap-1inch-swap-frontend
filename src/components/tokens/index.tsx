@@ -21,32 +21,29 @@ interface TokenSelectorProps {
 }
 
 const TokenSelector: React.FC<TokenSelectorProps> = ({ onSelectToken }) => {
-  const { tokens, loading, error } = useFetchTokens();
 
+  const { tokens } = useTokenContext();
   
-  useEffect(() => {
-    console.log("tokens",tokens);
-  }, [tokens]);
 
   const [searchInput, setSearchInput] = useState<string>('');
-  const [filteredTokens, setFilteredTokens] = useState<Token[]>([]);
+  const [filteredTokens, setFilteredTokens] = useState<Token[]|null>([]);
   const router = useRouter();
   useEffect(() => {
     setFilteredTokens(tokens);
   }, [tokens]);
 
-  useEffect(() => {}, [loading, tokens, error]);
+  useEffect(() => {}, [ tokens]);
 
   const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
     setSearchInput(value);
-    const filtered = tokens.filter(
+    const filtered = tokens?.filter(
       (token: any) =>
         token.name.toLowerCase().includes(value.toLowerCase()) ||
         token.symbol.toLowerCase().includes(value.toLowerCase()) ||
         token.address.toLowerCase().includes(value.toLowerCase()),
     );
-    setFilteredTokens(filtered);
+    setFilteredTokens(filtered??null);
   };
 
   const handleTokenSelection = (token: Token) => {
@@ -63,8 +60,7 @@ const TokenSelector: React.FC<TokenSelectorProps> = ({ onSelectToken }) => {
         handleSearchChange={handleSearchChange}
       />
       <TokenList
-        loading={loading}
-        filteredTokens={filteredTokens}
+        filteredTokens={filteredTokens!}
         handleTokenSelection={handleTokenSelection}
       />
     </Layout>

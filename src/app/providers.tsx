@@ -28,7 +28,7 @@ import { publicProvider } from "wagmi/providers/public";
 import { serverConfig } from "@/config/serverConfig";
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
-  [polygon,  polygonMumbai],
+  [polygonMumbai],
   [publicProvider()],
 );
 

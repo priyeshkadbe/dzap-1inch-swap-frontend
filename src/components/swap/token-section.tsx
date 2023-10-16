@@ -48,7 +48,7 @@ const TokenSection: React.FC<TokenSectionProps> = ({
             onChange={onAmountChange}
             placeholder={placeholder}
             disabled={disabled}
-            toAmount={toAmount}
+            toAmount={toAmount!}
             isLoading={isLoading}
           />
         </div>
