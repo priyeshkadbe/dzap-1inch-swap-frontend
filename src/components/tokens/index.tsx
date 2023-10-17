@@ -6,7 +6,6 @@ import Link from 'next/link';
 import { useTokenContext } from '@/context/TokenContext';
 import { useRouter } from 'next/navigation';
 import { Token } from '@/types';
-import { useFetchTokens } from '@/hooks/useFetchTokens';
 import { RotatingLines } from 'react-loader-spinner';
 import Image from 'next/image';
 import TokenItem from './token-item';
