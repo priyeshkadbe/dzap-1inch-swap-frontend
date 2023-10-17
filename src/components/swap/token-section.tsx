@@ -10,14 +10,14 @@ import { add } from 'lodash';
 
 interface TokenSectionProps {
   title: string;
-  token: Token | null;
+  token: Token ;
   linkPath: string;
-  amount: number;
-  onAmountChange?: (value: number) => void;
+  amount: string;
+  onAmountChange?: (value: string) => void;
   disabled?: boolean;
   placeholder: string;
-  toAmount?: number | null;
-  balance?: number | null;
+  toAmount?: string;
+  balance?: string;
   isLoading?:boolean;
 }
 
@@ -55,7 +55,7 @@ const TokenSection: React.FC<TokenSectionProps> = ({
           <TokenSelectorLink token={token} linkPath={linkPath} />
           <TokenInput
             value={amount}
-            onChange={onAmountChange}
+            onChange={onAmountChange!}
             placeholder={placeholder}
             disabled={disabled}
             toAmount={toAmount!}

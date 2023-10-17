@@ -10,7 +10,7 @@ import { toast } from 'react-hot-toast';
 import SwapButton from './swap-button';
 import { etherUnits, formatEther, parseEther } from 'viem';
 import { ethers } from 'ethers';
-import formatNumber from '@/utils/format-number';
+// import formatNumber from '@/utils/format-number';
 export default function Swap() {
   const {
     sellingToken,
@@ -29,7 +29,7 @@ export default function Swap() {
 
   useEffect(() => {
     if (data) {
-      setBuyingTokenAmount(Number(formatEther(BigInt(data.toAmount))));
+      setBuyingTokenAmount(formatEther(BigInt(data.toAmount)));
     }
   }, [
     sellingToken,
@@ -47,7 +47,7 @@ export default function Swap() {
       <div className="relative flex flex-col">
         <TokenSection
           title="You sell"
-          token={sellingToken}
+          token={sellingToken!}
           linkPath="/select-selling-token"
           amount={sellingTokenAmount!}
           onAmountChange={setSellingTokenAmount}
@@ -61,7 +61,7 @@ export default function Swap() {
         {/* You buy */}
         <TokenSection
           title="You buy"
-          token={buyingToken}
+          token={buyingToken!}
           toAmount={buyingTokenAmount}
           linkPath="/select-buying-token"
           amount={buyingTokenAmount}
@@ -75,13 +75,13 @@ export default function Swap() {
       <GasFeeInfo
         loading={isLoading}
         error={error!}
-        gas={Number(formatEther(BigInt(data?.gas! ?? 0)))}
+        gas={(formatEther(BigInt(data?.gas! ?? 0)))}
         toAmount={buyingTokenAmount!}
         sellingTokenSymbol={sellingToken?.symbol}
         sellingTokenAmount={sellingTokenAmount}
-        buyingTokenSymbol={buyingToken?.symbol}
+        buyingTokenSymbol={buyingToken?.symbol!}
         buyingTokenAmount={buyingTokenAmount!}
-        decimal={buyingToken?.decimals}
+        decimal={buyingToken?.decimals!}
       />
 
       <SwapButton />

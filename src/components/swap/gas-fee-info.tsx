@@ -7,18 +7,18 @@ import { style } from './style';
 import { useFetchQuote } from '@/hooks/useFetchQuote';
 // import {gasFeeFormatter} from '@/helper/gas-fee-formatter';
 import { ethers } from 'ethers';
-import formatNumber from '@/utils/format-number';
+//import formatNumber from '@/utils/format-number';
 
 interface GasFeeInfoProps {
   loading: boolean;
   error: string | null;
-  toAmount: number | null;
-  gas: number | null;
+  toAmount: string;
+  gas: string ;
   sellingTokenSymbol: string | undefined;
-  buyingTokenAmount: number | null;
-  sellingTokenAmount: string | number; // Add this line to include sellingTokenAmount
-  buyingTokenSymbol: string | undefined;
-  decimal: number | undefined;
+  buyingTokenAmount: string ;
+  sellingTokenAmount: string ; // Add this line to include sellingTokenAmount
+  buyingTokenSymbol: string ;
+  decimal: number ;
 }
 
 const GasFeeInfo: React.FC<GasFeeInfoProps> = ({
@@ -55,7 +55,7 @@ const GasFeeInfo: React.FC<GasFeeInfoProps> = ({
           <p className="text-sm text-gray-600">1 {sellingTokenSymbol}</p>
           {/* <LiaEqualsSolid className={style.icon} size={16} /> */}
           <p className="text-gray text-sm text-gray-600">
-            = { "  "} {formatNumber(calculatedPrice)} {buyingTokenSymbol}
+            = { "  "} {(calculatedPrice)} {buyingTokenSymbol}
           </p>
         </div>
         <div
@@ -66,7 +66,7 @@ const GasFeeInfo: React.FC<GasFeeInfoProps> = ({
           <FaGasPump className="text-sm text-gray-600" />
           <div className="text-sm flex items-center text-gray-600">
             <TbTilde className="text-xsm" />
-            {formatNumber(gas)}
+            {(gas)}
             {'MATIC'}
           </div>
         </div>

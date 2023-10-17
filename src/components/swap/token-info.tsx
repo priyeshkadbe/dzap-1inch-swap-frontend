@@ -4,11 +4,11 @@ import useSWR, { mutate } from 'swr';
 import axios from 'axios';
 import { route } from '@/api-routes/api-routes';
 import { Token } from '@/types';
-import formatNumber from '@/utils/format-number';
+//import formatNumber from '@/utils/format-number';
 
 interface TokenInfoProps {
   token: Token | null;
-  amount: number;
+  amount: string;
 }
 
 const fetchTokenPrice = async (url: string): Promise<number> => {
@@ -26,7 +26,7 @@ const TokenInfo: React.FC<TokenInfoProps> = ({ token, amount }) => {
   const [isLoadingNewData, setIsLoadingNewData] = useState<boolean>(false);
 
   const { data, isValidating } = useSWR(
-    token && amount !== 0 ? `${route.fetchToken}${token.address!}` : null,
+    token && Number(amount) !== 0 ? `${route.fetchToken}${token.address!}` : null,
     fetchTokenPrice,
     {
       revalidateOnFocus: false,
@@ -72,7 +72,7 @@ const TokenInfo: React.FC<TokenInfoProps> = ({ token, amount }) => {
           <div>
             <h4 className={`text-sm text-gray-500 capitalize `}>
               {'~$'}
-              {formatNumber(data * amount)}
+              {(data * Number(amount))}
             </h4>
           </div>
         )}

@@ -22,10 +22,10 @@ interface TokenContextProps {
   buyingToken: Token | null;
   setBuyingToken: Dispatch<SetStateAction<Token | null>>;
   tokens: Token[] | null;
-  sellingTokenAmount: number;
-  setSellingTokenAmount: Dispatch<SetStateAction<number>>;
-  buyingTokenAmount: number;
-  setBuyingTokenAmount: Dispatch<SetStateAction<number>>;
+  sellingTokenAmount: string;
+  setSellingTokenAmount: Dispatch<SetStateAction<string>>;
+  buyingTokenAmount: string;
+  setBuyingTokenAmount: Dispatch<SetStateAction<string>>;
   slippage: number;
 }
 
@@ -37,8 +37,8 @@ export const TokenProvider: React.FC<{ children: ReactNode }> = ({
   const [sellingToken, setSellingToken] = useState<Token | null>(null);
   const [buyingToken, setBuyingToken] = useState<Token | null>(null);
   const [tokens, setTokens] = useState<Token[] | null>(null);
-  const [sellingTokenAmount, setSellingTokenAmount] = useState<number>(0);
-  const [buyingTokenAmount, setBuyingTokenAmount] = useState<number>(0);
+  const [sellingTokenAmount, setSellingTokenAmount] = useState<string>("0");
+  const [buyingTokenAmount, setBuyingTokenAmount] = useState<string>("0");
   const [slippage, setSlippage] = useState<number>(2.5);
 
   const fetchTokens = async () => {
@@ -82,7 +82,7 @@ export const TokenProvider: React.FC<{ children: ReactNode }> = ({
   );
 };
 
-export const useTokenContext = () => {
+export const useTokenContext: () => TokenContextProps = () => {
   const context = useContext(TokenContext);
   if (!context) {
     throw new Error('useTokenContext must be used within a TokenProvider');

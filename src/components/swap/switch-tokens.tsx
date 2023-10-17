@@ -15,12 +15,12 @@ const handleSwitch = () => {
     buyingToken !== undefined &&
     buyingTokenAmount !== null &&
     buyingTokenAmount !== undefined &&
-    buyingTokenAmount !== 0
+    buyingTokenAmount !== "0"
   ) {
     let token1 = sellingToken;
     let token2 = buyingToken;
     let amount = buyingTokenAmount;
-    setBuyingTokenAmount(0);
+    setBuyingTokenAmount("0");
     setSellingToken(token2);
     setBuyingToken(token1);
     setSellingTokenAmount(amount!);
