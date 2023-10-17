@@ -14,7 +14,7 @@ import useSWR from 'swr';
 import { useAccount, useNetwork, useBalance } from 'wagmi';
 import { Token } from '@/types';
 import { route } from '@/api-routes/api-routes';
-
+import { serverConfig } from '@/config/serverConfig';
 
 interface TokenContextProps {
   sellingToken: Token | null;
@@ -60,6 +60,8 @@ export const TokenProvider: React.FC<{ children: ReactNode }> = ({
     if (data) {
       setTokens(data);
     }
+    
+    
   }, [data]);
 
   return (

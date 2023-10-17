@@ -1,11 +1,13 @@
 import React, { useEffect } from 'react';
 import { style } from './style';
 import { ThreeDots } from 'react-loader-spinner';
-import {formatEther, parseEther} from "viem"
-// import formatNumber from '@/utils/format-number';
+import { formatEther, parseEther } from 'viem';
+import { ethers } from 'ethers';
+import WeiToEther from "@/helper/wei-to-ether"
+import { useTokenContext } from '@/context/TokenContext';
 interface TokenInputProps {
   value: string;
-  toAmount: string ;
+  toAmount: string;
   onChange?: (value: string) => void;
   placeholder: string;
   disabled?: boolean;
@@ -20,42 +22,21 @@ const TokenInput: React.FC<TokenInputProps> = ({
   isLoading,
   toAmount,
 }) => {
+
+  const {sellingToken} = useTokenContext()
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (onChange) {
-      // onChange(Number(formatEther(BigInt(Number(e.target.value)))));
-      onChange(e.target.value)
+      e.preventDefault();
+      onChange(e.target.value);
     }
+    console.log('value recevied', toAmount);
+  
   };
 
-  // useEffect(() => {}, [value, toAmount, isLoading]);
-
-  // if (isLoading && disabled && value !== 0) {
-  //   return (
-  //     <ThreeDots
-  //       height="30"
-  //       width="30"
-  //       radius="9"
-  //       color="#4fa94d"
-  //       ariaLabel="three-dots-loading"
-  //       wrapperStyle={{}}
-  //       visible={true}
-  //     />
-  //   );
-  // }
-
-  // return (
-  //   <input
-  //     type="text"
-  //     placeholder={placeholder}
-  //     className={style.input}
-  //     value={disabled ? toAmount! : value}
-  //     onChange={handleChange}
-  //     disabled={disabled}
-  //   />
-  // );
+  useEffect(() => {}, [value, onChange, isLoading, toAmount, sellingToken]);
 
 
-  if (isLoading && disabled) {
+  if (isLoading ) {
     return (
       <ThreeDots
         height="30"
@@ -67,30 +48,20 @@ const TokenInput: React.FC<TokenInputProps> = ({
         visible={true}
       />
     );
-  } else if (disabled && toAmount) {
+  }
+
+  
     return (
       <input
-        type="text"
+        type="number"
         placeholder={placeholder}
         className={style.input}
-        value={toAmount}
-        // onChange={handleChange}
+        value={disabled ? toAmount : value}
+        onChange={handleChange}
         disabled={disabled}
       />
     );
-  } else {
-    return (
-      <input
-        type="string"
-        placeholder={placeholder}
-        className={style.input}
-        value={(value)}
-        onChange={handleChange}
-        // disabled={disabled}
-      />
-    );
-  }
-
+  
 };
 
 export default TokenInput;

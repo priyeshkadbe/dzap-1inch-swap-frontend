@@ -1,16 +1,18 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import Layout from './layout';
 import Header from './header';
 import TokenSection from './token-section';
 import SwitchTokens from './switch-tokens';
 import GasFeeInfo from './gas-fee-info';
+import SwapButton from './swap-button';
 import { useTokenContext } from '@/context/TokenContext';
 import { useFetchQuote } from '@/hooks/useFetchQuote';
-import { toast } from 'react-hot-toast';
-import SwapButton from './swap-button';
-import { etherUnits, formatEther, parseEther } from 'viem';
 import { ethers } from 'ethers';
-// import formatNumber from '@/utils/format-number';
+import { useNetwork } from 'wagmi';
+import formatNumber from '@/helper/format-number';
+import { toast } from 'react-hot-toast';
+import {parseEther} from "viem"
+
 export default function Swap() {
   const {
     sellingToken,
@@ -22,14 +24,20 @@ export default function Swap() {
   } = useTokenContext();
 
   const { data, isLoading, error } = useFetchQuote(
-    sellingToken!,
+    sellingToken,
     buyingToken,
-    Number(parseEther(sellingTokenAmount.toString())),
+    sellingTokenAmount
+      ? ethers.utils.parseEther(sellingTokenAmount).toString()
+      : null,
   );
+
+  const { chains } = useNetwork();
 
   useEffect(() => {
     if (data) {
-      setBuyingTokenAmount(formatEther(BigInt(data.toAmount)));
+      setBuyingTokenAmount(
+        formatNumber(ethers.utils.formatEther(data.toAmount)),
+      );
     }
   }, [
     sellingToken,
@@ -38,6 +46,7 @@ export default function Swap() {
     buyingTokenAmount,
     data,
     setBuyingTokenAmount,
+    chains,
   ]);
 
   return (
@@ -52,7 +61,7 @@ export default function Swap() {
           amount={sellingTokenAmount!}
           onAmountChange={setSellingTokenAmount}
           placeholder="0"
-          toAmount={buyingTokenAmount}
+          toAmount={data?.toAmount}
         />
 
         {/* Switch the Tokens */}
@@ -70,12 +79,11 @@ export default function Swap() {
           isLoading={isLoading}
         />
       </div>
-
       {/* Gas and Fee Info */}
       <GasFeeInfo
         loading={isLoading}
         error={error!}
-        gas={(formatEther(BigInt(data?.gas! ?? 0)))}
+        gas={ethers.utils.formatEther(data?.gas.toString()!??0).toString()}
         toAmount={buyingTokenAmount!}
         sellingTokenSymbol={sellingToken?.symbol}
         sellingTokenAmount={sellingTokenAmount}
@@ -83,7 +91,7 @@ export default function Swap() {
         buyingTokenAmount={buyingTokenAmount!}
         decimal={buyingToken?.decimals!}
       />
-
+      {/* {error && toast.error("supply not available")} */}
       <SwapButton />
     </Layout>
   );

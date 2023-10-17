@@ -1,32 +1,39 @@
-import { useTokenContext } from "@/context/TokenContext";
-import { AiOutlineArrowDown } from "react-icons/ai";
+import { useTokenContext } from '@/context/TokenContext';
+import { AiOutlineArrowDown } from 'react-icons/ai';
+import WeiToEther from '@/helper/wei-to-ether';
+import { ethers } from 'ethers';
 
 export default function SwitchTokens() {
+  const {
+    buyingToken,
+    sellingToken,
+    buyingTokenAmount,
+    sellingTokenAmount,
+    setSellingToken,
+    setBuyingToken,
+    setSellingTokenAmount,
+    setBuyingTokenAmount,
+  } = useTokenContext();
 
-  const { buyingToken, sellingToken, buyingTokenAmount, sellingTokenAmount,
-  setSellingToken,setBuyingToken,setSellingTokenAmount,setBuyingTokenAmount
-  } = useTokenContext()
-  
-const handleSwitch = () => {
-  if (
-    sellingToken !== null &&
-    sellingToken !== undefined &&
-    buyingToken !== null &&
-    buyingToken !== undefined &&
-    buyingTokenAmount !== null &&
-    buyingTokenAmount !== undefined &&
-    buyingTokenAmount !== "0"
-  ) {
-    let token1 = sellingToken;
-    let token2 = buyingToken;
-    let amount = buyingTokenAmount;
-    setBuyingTokenAmount("0");
-    setSellingToken(token2);
-    setBuyingToken(token1);
-    setSellingTokenAmount(amount!);
-  }
-};
-
+  const handleSwitch = () => {
+    if (
+      sellingToken !== null &&
+      sellingToken !== undefined &&
+      buyingToken !== null &&
+      buyingToken !== undefined &&
+      buyingTokenAmount !== null &&
+      buyingTokenAmount !== undefined &&
+      buyingTokenAmount !== '0'
+    ) {
+      let token1 = sellingToken;
+      let token2 = buyingToken;
+      let amount = buyingTokenAmount;
+      setBuyingTokenAmount('0');
+      setSellingToken(token2);
+      setBuyingToken(token1);
+      setSellingTokenAmount(amount.toString());
+    }
+  };
 
   return (
     <button
@@ -40,6 +47,4 @@ const handleSwitch = () => {
       />
     </button>
   );
-
-
 }

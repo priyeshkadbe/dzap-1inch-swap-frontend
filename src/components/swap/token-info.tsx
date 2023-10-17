@@ -4,6 +4,7 @@ import useSWR, { mutate } from 'swr';
 import axios from 'axios';
 import { route } from '@/api-routes/api-routes';
 import { Token } from '@/types';
+import formatNumber from '@/helper/format-number';
 //import formatNumber from '@/utils/format-number';
 
 interface TokenInfoProps {
@@ -72,7 +73,7 @@ const TokenInfo: React.FC<TokenInfoProps> = ({ token, amount }) => {
           <div>
             <h4 className={`text-sm text-gray-500 capitalize `}>
               {'~$'}
-              {(data * Number(amount))}
+              {formatNumber((data * Number(amount)).toString())}
             </h4>
           </div>
         )}

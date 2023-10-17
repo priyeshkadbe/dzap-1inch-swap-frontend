@@ -5,14 +5,14 @@ import { useEffect, useState } from 'react';
 import useSWR from 'swr';
 
 interface FetchQuoteResponse {
-  toAmount: number;
-  gas: number;
+  toAmount: string;
+  gas: string;
 }
 
 export const useFetchQuote = (
   sellingToken: Token | null,
   buyingToken: Token | null,
-  sellingTokenAmount: number | null,
+  sellingTokenAmount: string | null,
 ) => {
   const fetcher = async (url: string): Promise<FetchQuoteResponse> => {
     try {
@@ -30,13 +30,12 @@ export const useFetchQuote = (
     buyingToken !== null &&
     buyingToken !== undefined &&
     sellingTokenAmount !== null &&
-    sellingTokenAmount !== undefined &&
-    sellingTokenAmount !== 0;
+    sellingTokenAmount !== undefined 
 
   const url = shouldFetchData
     ? `${
         route.getQuote
-      }?tokenIn=${sellingToken?.address}&tokenOut=${buyingToken?.address}&tokenInAmount=${sellingTokenAmount.toString()}`
+      }?tokenIn=${sellingToken?.address}&tokenOut=${buyingToken?.address}&tokenInAmount=${sellingTokenAmount}`
     : null;
 
   const { data, error } = useSWR<FetchQuoteResponse>(url, fetcher, {
