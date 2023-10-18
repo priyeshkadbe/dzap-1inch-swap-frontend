@@ -11,7 +11,6 @@ import React, {
 
 import axios from 'axios';
 import useSWR from 'swr';
-import { useAccount, useNetwork, useBalance } from 'wagmi';
 import { Token } from '@/types';
 import { route } from '@/api-routes/api-routes';
 import { serverConfig } from '@/config/serverConfig';

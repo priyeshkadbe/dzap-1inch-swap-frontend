@@ -47,10 +47,7 @@ const useAllowance = (
 
     fetchAllowance();
 
-    // Cleanup function 
-    // return () => {
-    //   cleanup logic here
-    // };
+  
   }, [tokenAddress, walletAddress]);
 
   return { loading, error, allowanceData };

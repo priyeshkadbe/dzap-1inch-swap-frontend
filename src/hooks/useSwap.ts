@@ -52,10 +52,7 @@ const useSwap = (
 
     fetchData();
 
-    // Cleanup function if needed (e.g., cancelling API request)
-    // return () => {
-    //   cleanup logic here
-    // };
+    
   }, [
     sellingTokenAddress,
     buyingTokenAddress,

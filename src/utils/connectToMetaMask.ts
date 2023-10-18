@@ -1,10 +1,10 @@
 import { ethers } from 'ethers';
 
 interface MetaMaskState {
-  provider: ethers.providers.Web3Provider | null;
+  provider: ethers.BrowserProvider | null;
   loading: boolean;
   error: string | null;
-  address: string | null; // Add the address property
+  address: string | null;
 }
 
 export const connectToMetaMask = async (): Promise<MetaMaskState> => {
@@ -38,7 +38,7 @@ export const connectToMetaMask = async (): Promise<MetaMaskState> => {
           method: 'eth_requestAccounts',
         });
 
-        const provider = new ethers.providers.Web3Provider(ethereum);
+        const provider = new ethers.BrowserProvider(ethereum);
 
         const connectedAddress = accounts[0];
 

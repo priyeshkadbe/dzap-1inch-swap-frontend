@@ -8,4 +8,7 @@ export const serverConfig = {
   MATIC_TOKEN_ADDRESS: process.env.NEXT_PUBLIC_MATIC_TOKEN_ADDRESS,
   USDT_TOKEN_ADDRESS: process.env.NEXT_PUBLIC_USDT_TOKEN_ADDRESS,
   CHAIN_ID: process.env.NEXT_PUBLIC_POLYGON_MAINNET_CHAIN_ID,
+  TEST_CONTRACT_ADDRESS: process.env.NEXT_PUBLIC_TEST_CONTRACT_ADDRESS,
+  ONE_INCH_ABI: require('../../abi/swap.json'),
+  ERC_20_ABI: require('../../abi/IERC20.json'),
 };

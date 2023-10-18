@@ -1,4 +1,4 @@
-"use client"
+'use client';
 import React, {
   createContext,
   useContext,
@@ -7,13 +7,12 @@ import React, {
   Dispatch,
   SetStateAction,
 } from 'react';
-
+import { ethers } from 'ethers';
 interface WalletState {
-  provider: any; // Replace 'any' with the appropriate type for your MetaMask provider
+  provider: ethers.BrowserProvider | null;
   loading: boolean;
   error: null | string;
   accountAddress: null | string;
-  walletBalance: number;
 }
 
 interface WalletContextProps {
@@ -33,7 +32,7 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
     loading: false,
     error: null,
     accountAddress: null,
-    walletBalance: 0,
+    
   });
 
   return (

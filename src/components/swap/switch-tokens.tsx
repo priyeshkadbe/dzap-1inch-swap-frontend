@@ -1,6 +1,5 @@
 import { useTokenContext } from '@/context/TokenContext';
 import { AiOutlineArrowDown } from 'react-icons/ai';
-import WeiToEther from '@/helper/wei-to-ether';
 import { ethers } from 'ethers';
 
 export default function SwitchTokens() {
@@ -16,6 +15,9 @@ export default function SwitchTokens() {
   } = useTokenContext();
 
   const handleSwitch = () => {
+
+
+
     if (
       sellingToken !== null &&
       sellingToken !== undefined &&
@@ -25,14 +27,19 @@ export default function SwitchTokens() {
       buyingTokenAmount !== undefined &&
       buyingTokenAmount !== '0'
     ) {
+      setBuyingToken(null);
+      setSellingToken(null);
+      setSellingTokenAmount("0");
       let token1 = sellingToken;
       let token2 = buyingToken;
       let amount = buyingTokenAmount;
-      setBuyingTokenAmount('0');
       setSellingToken(token2);
       setBuyingToken(token1);
-      setSellingTokenAmount(amount.toString());
+      setSellingTokenAmount(amount);
     }
+
+    
+
   };
 
   return (

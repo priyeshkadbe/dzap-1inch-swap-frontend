@@ -1,82 +1,122 @@
-import React, { useEffect } from 'react';
-import { ethers } from 'ethers';
+import React, { useEffect, useState } from 'react';
 import { FaSpinner } from 'react-icons/fa';
 import { useWallet } from '@/context/WalletContext';
-import { connectToMetaMask } from '@/utils/connectToMetaMask';
 import { style } from './style';
+import { serverConfig } from '@/config/serverConfig';
 import toast from 'react-hot-toast';
-
-const SwapButton: React.FC = () => {
+import checkAllowance from '@/utils/checkAllowance';
+import { useTokenContext } from '@/context/TokenContext';
+import { contractInteraction } from '@/utils/contract-interaction';
+import { convertAmountToWei } from '@/helper/convert-amount-to-wei';
+import IERC20 from '../../../abi/IERC20.json';
+import { fetchSwapData } from '@/utils/fetchSwapData';
+import { SwapData } from '@/types';
+import OneInchContract from '../../../abi/swap.json';
+import { ethers } from 'ethers';
+const ConnectButton: React.FC = () => {
   const { walletState, setWalletState } = useWallet();
 
-  const handleConnectClick = async () => {
-    setWalletState((prevState) => ({ ...prevState, loading: true }));
+  const [swapData, setSwapData] = useState<SwapData | null>(null);
 
-    try {
-      const { provider, address, error, loading } = await connectToMetaMask();
+  const {
+    sellingToken,
+    sellingTokenAmount,
+    buyingToken,
+    buyingTokenAmount,
+    slippage,
+  } = useTokenContext();
 
-      setWalletState({
-        provider,
-        loading: false,
-        error: null,
-        accountAddress: address,
-        walletBalance: 0,
-      });
-    } catch (error) {
+  const handleConnect = async () => {
+    if (typeof window.ethereum !== 'undefined') {
+      try {
+        await window.ethereum.request({ method: 'eth_requestAccounts' });
+        const provider = new ethers.BrowserProvider(window.ethereum);
+        setWalletState({
+          provider,
+          loading: false,
+          error: null,
+          accountAddress: null,
+        });
+
+        const signer = await provider.getSigner();
+        const address = await signer.getAddress();
+        setWalletState((prevState) => ({
+          ...prevState,
+          accountAddress: address,
+        }));
+        console.log('Connected user address:', address);
+      } catch (error) {
+        console.error('Error connecting to MetaMask:', error);
+        setWalletState((prevState) => ({
+          ...prevState,
+          loading: false,
+          error: 'Failed to connect to MetaMask',
+        }));
+      }
+    } else {
+      console.error('MetaMask is not installed');
       setWalletState((prevState) => ({
         ...prevState,
         loading: false,
-        error: (error as string) || 'Failed to connect to MetaMask',
+        error: 'MetaMask is not installed',
       }));
     }
   };
 
-  useEffect(() => {
-    const handleAccountsChanged = (accounts: string[]) => {
-      if (accounts.length === 0) {
-        // User disconnected, update the provider to null
-        setWalletState((prevState) => ({
-          ...prevState,
-          provider: null,
-          accountAddress: null,
-          walletBalance: 0,
-        }));
+  const handleSwap = async () => {
+    try {
+      if (!walletState) {
+        toast.error('Please connect to MetaMask');
+        return;
       }
-    };
 
-    // Listen for accountsChanged event
-    if (walletState.provider) {
-      walletState.provider.on('accountsChanged', handleAccountsChanged);
-    }
-
-    return () => {
-      // Clean up the event listener when the component unmounts
-      if (walletState.provider) {
-        walletState.provider.removeListener(
-          'accountsChanged',
-          handleAccountsChanged,
+      if (walletState.accountAddress && sellingToken?.address) {
+        const responseCheck = await checkAllowance(
+          sellingToken?.address,
+          walletState.accountAddress,
         );
+
+        console.log('allowanceData', responseCheck);
+        if (responseCheck?.allowance === '0') {
+          toast.error('Allowance not found');
+          return;
+        }
+
+
+        const response = await fetchSwapData(
+          sellingToken.address,
+          buyingToken?.address,
+          convertAmountToWei(sellingTokenAmount, sellingToken.decimals),
+         walletState.accountAddress,
+          slippage,
+        );
+        console.log('response', response.data);
+        if (response.data) {
+          setSwapData(response?.data);
+          console.log('swapdata', swapData);
+        }
       }
-    };
-  }, [walletState.provider, setWalletState]);
+    } catch (error) {
+      console.error('Error occurred while checking allowance:', error);
+      toast.error('Failed to check allowance');
+    }
+  };
 
   return (
-    <div>
-      {walletState.accountAddress ? (
-        <button className={style.button}>
-          <p className="text-md text-white">swap</p>
-        </button>
+    <button
+      className={style.button}
+      onClick={() => (walletState.provider ? handleSwap() : handleConnect())}
+    >
+      {walletState.loading ? (
+        <FaSpinner className="animate-spin text-gray-400" />
       ) : (
-        <button className={style.button} onClick={handleConnectClick}>
-          {walletState.loading ? (
-            <FaSpinner className="animate-spin" />
-          ) : (
-            <p className="text-md text-white">Connect to MetaMask</p>
-          )}
-        </button>
+        <p className="text-md text-white">
+          {walletState.accountAddress ? 'swap' : 'Connect to MetaMask'}
+        </p>
       )}
-    </div>
+    </button>
+    
   );
 };
 
-export default SwapButton;
+export default ConnectButton;

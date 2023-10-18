@@ -16,7 +16,7 @@ interface GasFeeInfoProps {
   gas: string ;
   sellingTokenSymbol: string | undefined;
   buyingTokenAmount: string ;
-  sellingTokenAmount: string ; // Add this line to include sellingTokenAmount
+  sellingTokenAmount: string ; 
   buyingTokenSymbol: string ;
   decimal: number ;
 }

@@ -25,16 +25,19 @@ export default function Swap() {
   const { data, isLoading, error } = useFetchQuote(
     sellingToken,
     buyingToken,
-    sellingTokenAmount ? ethers.utils.parseEther(sellingTokenAmount).toString() : null,
-
+    sellingTokenAmount
+      ? String(
+          parseFloat(sellingTokenAmount) *
+            Math.pow(10, (sellingToken && sellingToken.decimals) || 0),
+        )
+      : null,
   );
 
 
   useEffect(() => {
-    if (data) {
-      setBuyingTokenAmount(
-        formatNumber(ethers.utils.formatEther(data.toAmount)).toString(),
-      );
+    if (data && buyingToken) {
+      let decimals = Number(`1E${buyingToken.decimals}`)
+      setBuyingTokenAmount((Number(data.toAmount) / decimals).toString());
     }
   }, [
     sellingToken,
@@ -57,7 +60,7 @@ export default function Swap() {
           amount={sellingTokenAmount!}
           onAmountChange={setSellingTokenAmount}
           placeholder="0"
-          toAmount={data?.toAmount}
+          toAmount={buyingTokenAmount}
         />
 
         {/* Switch the Tokens */}
@@ -79,7 +82,7 @@ export default function Swap() {
       <GasFeeInfo
         loading={isLoading}
         error={error!}
-        gas={ethers.utils.formatEther(data?.gas.toString()!??0).toString()}
+        gas={ethers.formatEther(data?.gas.toString()!??0).toString()}
         toAmount={buyingTokenAmount!}
         sellingTokenSymbol={sellingToken?.symbol}
         sellingTokenAmount={sellingTokenAmount}

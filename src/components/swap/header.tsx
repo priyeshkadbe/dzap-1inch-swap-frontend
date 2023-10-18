@@ -2,7 +2,7 @@ import React from "react";
 import { IoMdRefresh } from "react-icons/io";
 import { AiOutlinePlus } from "react-icons/ai";
 import { HiAdjustmentsHorizontal } from "react-icons/hi2";
-import {style} from "./style"; // Import your CSS file if necessary
+import {style} from "./style"; 
 
 const Header = () => {
   return (

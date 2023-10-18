@@ -3,7 +3,7 @@ import { style } from './style';
 import { ThreeDots } from 'react-loader-spinner';
 import { formatEther, parseEther } from 'viem';
 import { ethers } from 'ethers';
-import WeiToEther from "@/helper/wei-to-ether"
+
 import { useTokenContext } from '@/context/TokenContext';
 interface TokenInputProps {
   value: string;
@@ -51,10 +51,10 @@ const TokenInput: React.FC<TokenInputProps> = ({
   
     return (
       <input
-        type="text"
+        type={disabled?"number":"number"}
         placeholder={placeholder}
         className={style.input}
-        value={disabled ? toAmount : value}
+        value={disabled ? toAmount.toString() : value}
         onChange={handleChange}
         disabled={disabled}
       />

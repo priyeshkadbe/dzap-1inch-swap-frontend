@@ -51,10 +51,7 @@ const useTransaction = (
 
     fetchTransactionData();
 
-    // Cleanup function if needed (e.g., cancelling API request)
-    // return () => {
-    //   cleanup logic here
-    // };
+  
   }, [tokenAddress, sellingTokenAmount]);
 
   return { loading, error, transactionData };
