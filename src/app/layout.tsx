@@ -1,12 +1,11 @@
-import { TokenProvider } from "@/context/TokenContext";
-import "./globals.css";
-import { Inter } from "next/font/google";
-import { Providers } from "./providers";
-import Navbar from "@/components/navbar/index";
-import  { Toaster } from 'react-hot-toast';
-const inter = Inter({ subsets: ["latin"] });
+import { TokenProvider } from '@/context/TokenContext';
+import './globals.css';
+import { Inter } from 'next/font/google';
 
-
+import Navbar from '@/components/navbar/index';
+import { Toaster } from 'react-hot-toast';
+import { WalletProvider } from '@/context/WalletContext';
+const inter = Inter({ subsets: ['latin'] });
 
 export default function RootLayout({
   children,
@@ -16,13 +15,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Providers>
+        <WalletProvider>
           <TokenProvider>
             <Toaster />
             <Navbar />
             {children}
           </TokenProvider>
-        </Providers>
+        </WalletProvider>
       </body>
     </html>
   );

@@ -8,10 +8,9 @@ import SwapButton from './swap-button';
 import { useTokenContext } from '@/context/TokenContext';
 import { useFetchQuote } from '@/hooks/useFetchQuote';
 import { ethers } from 'ethers';
-import { useNetwork } from 'wagmi';
 import formatNumber from '@/helper/format-number';
 import { toast } from 'react-hot-toast';
-import {parseEther} from "viem"
+
 
 export default function Swap() {
   const {
@@ -26,17 +25,15 @@ export default function Swap() {
   const { data, isLoading, error } = useFetchQuote(
     sellingToken,
     buyingToken,
-    sellingTokenAmount
-      ? ethers.utils.parseEther(sellingTokenAmount).toString()
-      : null,
+    sellingTokenAmount ? ethers.utils.parseEther(sellingTokenAmount).toString() : null,
+
   );
 
-  const { chains } = useNetwork();
 
   useEffect(() => {
     if (data) {
       setBuyingTokenAmount(
-        formatNumber(ethers.utils.formatEther(data.toAmount)),
+        formatNumber(ethers.utils.formatEther(data.toAmount)).toString(),
       );
     }
   }, [
@@ -46,7 +43,6 @@ export default function Swap() {
     buyingTokenAmount,
     data,
     setBuyingTokenAmount,
-    chains,
   ]);
 
   return (

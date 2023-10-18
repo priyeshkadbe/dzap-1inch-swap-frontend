@@ -4,9 +4,7 @@ import TokenInput from './token-input';
 import TokenInfo from './token-info';
 import { style } from './style';
 import { Token } from '@/types';
-import { useAccount, useBalance,Address } from 'wagmi';
-import { formatEther, parseEther } from 'viem';
-import { add } from 'lodash';
+
 import { useTokenContext } from '@/context/TokenContext';
 
 interface TokenSectionProps {
@@ -18,7 +16,6 @@ interface TokenSectionProps {
   disabled?: boolean;
   placeholder: string;
   toAmount?: string;
-  balance?: string;
   isLoading?:boolean;
 }
 
@@ -32,22 +29,15 @@ const TokenSection: React.FC<TokenSectionProps> = ({
   placeholder,
   toAmount,
   isLoading,
-  balance
 }) => {
 
   const {sellingToken} = useTokenContext()
-  const {address} = useAccount()
-  const { data } = useBalance({
-    address: address,
-    token: token?.address as Address,
-  });
+
   useEffect(() => {}, [
     token,
     amount,
     onAmountChange,
     toAmount,
-    balance,
-    data,
     sellingToken,
   ]);
 

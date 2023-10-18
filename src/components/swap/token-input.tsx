@@ -28,9 +28,7 @@ const TokenInput: React.FC<TokenInputProps> = ({
     if (onChange) {
       e.preventDefault();
       onChange(e.target.value);
-    }
-    console.log('value recevied', toAmount);
-  
+    }  
   };
 
   useEffect(() => {}, [value, onChange, isLoading, toAmount, sellingToken]);
@@ -53,7 +51,7 @@ const TokenInput: React.FC<TokenInputProps> = ({
   
     return (
       <input
-        type="number"
+        type="text"
         placeholder={placeholder}
         className={style.input}
         value={disabled ? toAmount : value}

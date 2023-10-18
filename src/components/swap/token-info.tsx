@@ -27,7 +27,7 @@ const TokenInfo: React.FC<TokenInfoProps> = ({ token, amount }) => {
   const [isLoadingNewData, setIsLoadingNewData] = useState<boolean>(false);
 
   const { data, isValidating } = useSWR(
-    token && Number(amount) !== 0 ? `${route.fetchToken}${token.address!}` : null,
+    token  ? `${route.fetchToken}${token.address!}` : null,
     fetchTokenPrice,
     {
       revalidateOnFocus: false,
@@ -43,7 +43,7 @@ const TokenInfo: React.FC<TokenInfoProps> = ({ token, amount }) => {
     if (!isValidating && isLoadingNewData) {
       setIsLoadingNewData(false);
     }
-  }, [isValidating, isLoadingNewData]);
+  }, [isValidating, isLoadingNewData,amount]);
 
   const handleRefresh = () => {
     setIsLoadingNewData(true);
@@ -73,7 +73,7 @@ const TokenInfo: React.FC<TokenInfoProps> = ({ token, amount }) => {
           <div>
             <h4 className={`text-sm text-gray-500 capitalize `}>
               {'~$'}
-              {formatNumber((data * Number(amount)).toString())}
+              {((data * Number(amount)).toPrecision(18))}
             </h4>
           </div>
         )}
