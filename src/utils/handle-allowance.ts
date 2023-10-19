@@ -57,15 +57,15 @@ export const handleAllowance = async ({
 
       const contractWithSigner = tokenContract?.contract?.connect(signer) as any;
 
-      const hash = await contractWithSigner?.approve(
-        serverConfig.TEST_CONTRACT_ADDRESS,
+      const txHash = await contractWithSigner?.approve(
+        serverConfig.CONTRACT_ADDRESS,
         convertAmountToWei(sellingTokenAmount, sellingToken.decimals),
       );
 
-      await hash?.wait();
+      await txHash?.wait();
       await toast.success('Transaction successful');
       setAllowanceSuccessful(true);
-      console.log('Transaction Hash:', hash?.hash);
+      console.log('Transaction Hash:', txHash?.hash);
     }
     setLoading(false);
   } catch (error) {

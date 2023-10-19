@@ -1,6 +1,7 @@
 import { WalletState } from '@/types';
 import { ethers } from 'ethers';
 import { Dispatch, SetStateAction } from 'react';
+import toast from 'react-hot-toast';
 
 export const connectToMetamask = async (
   walletState: WalletState,
@@ -8,6 +9,12 @@ export const connectToMetamask = async (
 ) => {
   if (typeof window.ethereum !== 'undefined') {
     try {
+      const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+
+      if (chainId !== '0x89') {
+        toast.error('Please switch to the Polygon Mainnet network');
+        return;
+      }
       await window.ethereum.request({ method: 'eth_requestAccounts' });
       const provider = new ethers.BrowserProvider(window.ethereum);
       setWalletState({

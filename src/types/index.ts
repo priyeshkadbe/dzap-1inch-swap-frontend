@@ -28,6 +28,11 @@ export interface SwapData {
   tx: SwapTransaction;
 }
 
+export interface SwapResponse {
+  data: SwapData | null;
+  error: string | { statusCode: number; description: string } | null;
+}
+
 export interface WalletState {
   provider: ethers.BrowserProvider | null;
   loading: boolean;

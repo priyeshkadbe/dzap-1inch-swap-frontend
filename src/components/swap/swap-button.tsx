@@ -40,6 +40,7 @@ const SwapButton: React.FC = () => {
         sellingTokenAmount: sellingTokenAmount,
         buyingTokenAddress: buyingToken?.address,
         slippage: slippage,
+        sellingToken
       });
     } catch (error) {
       console.error('Error occurred while swapping:', error);
