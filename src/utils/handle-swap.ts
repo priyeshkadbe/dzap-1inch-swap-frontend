@@ -1,5 +1,5 @@
 import toast from 'react-hot-toast';
-import checkAllowance from '@/utils/checkAllowance';
+
 import { SwapResponse } from '@/types/index';
 import { convertAmountToWei } from '@/helper/convert-amount-to-wei';
 import { Token, WalletState } from '@/types';
@@ -41,15 +41,6 @@ export const handleSwap = async ({
       sellingTokenAddress &&
       buyingTokenAddress
     ) {
-      const responseCheck = await checkAllowance(
-        sellingTokenAddress,
-        walletState.accountAddress,
-      );
-
-      if (responseCheck?.allowance === '0') {
-        toast.error('Allowance not found');
-        return;
-      }
 
       const response = await axios.get<SwapResponse>(route.swap, {
         params: {

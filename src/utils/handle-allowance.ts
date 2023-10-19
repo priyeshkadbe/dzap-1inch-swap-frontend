@@ -1,10 +1,11 @@
 import toast from 'react-hot-toast';
 import { Token, WalletState } from '@/types';
-import checkAllowance from '@/utils/checkAllowance';
 import { contractInteraction } from '@/utils/contract-interaction';
 import IERC20 from '../../abi/IERC20.json';
 import { convertAmountToWei } from '@/helper/convert-amount-to-wei';
 import { serverConfig } from '@/config/serverConfig';
+import { route } from '@/api-routes/api-routes';
+import axios from 'axios';
 
 interface AllowanceHandlerProps {
   walletState: WalletState | null;
@@ -15,8 +16,6 @@ interface AllowanceHandlerProps {
   sellingToken: Token;
   setAllowanceSuccessful: React.Dispatch<React.SetStateAction<boolean>>;
 }
-
-
 
 export const handleAllowance = async ({
   sellingToken,
@@ -35,12 +34,14 @@ export const handleAllowance = async ({
       return;
     }
     setLoading(true);
-    const responseCheck = await checkAllowance(
-      sellingTokenAddress,
-      accountAddress,
-    );
+    const response = await axios.get(route.allowance, {
+      params: {
+        tokenAddress: sellingTokenAddress,
+        walletAddress: walletState.accountAddress,
+      },
+    });
 
-    if (responseCheck?.allowance === '0') {
+    if (response?.data.allowance === '0') {
       setLoading(false);
       toast.error('Allowance not found');
       return;
@@ -55,7 +56,9 @@ export const handleAllowance = async ({
     if (tokenContract && walletState.provider) {
       const signer = await walletState?.provider.getSigner();
 
-      const contractWithSigner = tokenContract?.contract?.connect(signer) as any;
+      const contractWithSigner = (await tokenContract?.contract?.connect(
+        signer,
+      )) as any;
 
       const txHash = await contractWithSigner?.approve(
         serverConfig.CONTRACT_ADDRESS,
