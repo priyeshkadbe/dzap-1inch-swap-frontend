@@ -9,7 +9,7 @@ interface ContractInteractionState {
 export const contractInteraction = async (
   address: string,
   provider: ethers.BrowserProvider,
-  abi: ethers.Interface,
+  abi: any,
 ): Promise<ContractInteractionState> => {
   try {
     const contract = new ethers.Contract(address, abi, provider);

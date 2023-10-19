@@ -8,12 +8,7 @@ import React, {
   SetStateAction,
 } from 'react';
 import { ethers } from 'ethers';
-interface WalletState {
-  provider: ethers.BrowserProvider | null;
-  loading: boolean;
-  error: null | string;
-  accountAddress: null | string;
-}
+import { WalletState } from '@/types';
 
 interface WalletContextProps {
   walletState: WalletState;

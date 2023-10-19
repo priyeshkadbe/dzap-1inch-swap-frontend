@@ -1,13 +1,8 @@
 import React, { useEffect } from 'react';
 import { AiOutlineInfoCircle } from 'react-icons/ai';
 import { FaGasPump } from 'react-icons/fa';
-import { LiaEqualsSolid } from 'react-icons/lia';
 import { TbTilde } from 'react-icons/tb';
 import { style } from './style';
-import { useFetchQuote } from '@/hooks/useFetchQuote';
-// import {gasFeeFormatter} from '@/helper/gas-fee-formatter';
-import { ethers } from 'ethers';
-//import formatNumber from '@/utils/format-number';
 
 interface GasFeeInfoProps {
   loading: boolean;

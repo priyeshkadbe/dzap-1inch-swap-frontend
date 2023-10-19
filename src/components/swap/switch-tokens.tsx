@@ -44,7 +44,7 @@ export default function SwitchTokens() {
 
   return (
     <button
-      className="flex justify-center rounded-full items-center absolute right-[42%] top-[40%]   transition-transform ease-in-out -my-2"
+      className="flex justify-center rounded-full items-center absolute right-[42%] top-[45%]   transition-transform ease-in-out -my-2"
       aria-label="Switch Tokens"
       onClick={() => handleSwitch()}
     >

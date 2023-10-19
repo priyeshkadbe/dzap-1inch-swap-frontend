@@ -10,6 +10,7 @@ import { useFetchQuote } from '@/hooks/useFetchQuote';
 import { ethers } from 'ethers';
 import formatNumber from '@/helper/format-number';
 import { toast } from 'react-hot-toast';
+import { convertAmountToWei } from '@/helper/convert-amount-to-wei';
 
 
 export default function Swap() {
@@ -26,10 +27,7 @@ export default function Swap() {
     sellingToken,
     buyingToken,
     sellingTokenAmount
-      ? String(
-          parseFloat(sellingTokenAmount) *
-            Math.pow(10, (sellingToken && sellingToken.decimals) || 0),
-        )
+      ? convertAmountToWei(sellingTokenAmount, sellingToken?.decimals!)
       : null,
   );
 
@@ -48,6 +46,8 @@ export default function Swap() {
     setBuyingTokenAmount,
   ]);
 
+
+  
   return (
     <Layout>
       <Header />

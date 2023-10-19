@@ -52,7 +52,7 @@ export const useFetchQuote = (
       if (mounted) {
         setIsLoading(false);
       }
-    }, 1000);
+    }, 15000);
 
     return () => {
       mounted = false;

@@ -1,4 +1,4 @@
-
+import { ethers } from 'ethers';
 
 export interface Token {
   symbol: string;
@@ -9,12 +9,10 @@ export interface Token {
   tags: string[];
 }
 
- 
 export interface TokenPrice {
   address: string;
   price: any;
 }
-
 
 interface SwapTransaction {
   from: string;
@@ -30,4 +28,9 @@ export interface SwapData {
   tx: SwapTransaction;
 }
 
-
+export interface WalletState {
+  provider: ethers.BrowserProvider | null;
+  loading: boolean;
+  error: null | string;
+  accountAddress: null | string;
+}
