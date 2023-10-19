@@ -8,11 +8,11 @@ interface ContractInteractionState {
 
 export const contractInteraction = async (
   address: string,
-  provider: ethers.BrowserProvider,
+  signer: ethers.Signer,
   abi: any,
 ): Promise<ContractInteractionState> => {
   try {
-    const contract = new ethers.Contract(address, abi, provider);
+    const contract = new ethers.Contract(address, abi, signer);
     return { contract, loading: false, error: null };
   } catch (error) {
     console.error('Contract Interaction Error:', error);

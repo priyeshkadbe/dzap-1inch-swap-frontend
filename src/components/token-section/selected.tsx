@@ -1,19 +1,18 @@
-import React, { useEffect } from "react";
-import { AiOutlineDown } from "react-icons/ai";
-import { style } from "./style";
+import { Token } from '@/types';
+import React from 'react';
+import { AiOutlineDown } from 'react-icons/ai';
+import { style } from './styles';
+import Image from 'next/image';
 
-interface Token {
-  logoURI: string;
-  symbol: string;
+interface SelectedProps {
+  token: {
+    logoURI: string;
+    symbol: string;
+  } | null;
+  linkPath: string;
 }
 
-interface TokenSelectorProps {
-  token?: Token | null;
-}
-
-const TokenSelector: React.FC<TokenSelectorProps> = ({ token }) => {
-  useEffect(() => {}, [token]);
-
+const Selected: React.FC<SelectedProps> = ({ token }) => {
   return (
     <div className={style.selectorDropdown}>
       {token ? (
@@ -31,4 +30,4 @@ const TokenSelector: React.FC<TokenSelectorProps> = ({ token }) => {
   );
 };
 
-export default TokenSelector;
+export default Selected;

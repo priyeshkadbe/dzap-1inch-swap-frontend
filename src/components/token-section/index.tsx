@@ -1,22 +1,21 @@
 import React, { useEffect } from 'react';
-import TokenSelectorLink from './token.selector-link';
-import TokenInput from './token-input';
-import TokenInfo from './token-info';
-import { style } from './style';
-import { Token } from '@/types';
-
+import Input from './input';
+import Price from './price';
 import { useTokenContext } from '@/context/TokenContext';
+import Selector from './selector';
+import { Token } from '@/types';
+import { style } from './styles';
 
 interface TokenSectionProps {
   title: string;
-  token: Token ;
+  token: Token;
   linkPath: string;
   amount: string;
   onAmountChange?: (value: string) => void;
   disabled?: boolean;
   placeholder: string;
   toAmount?: string;
-  isLoading?:boolean;
+  isLoading?: boolean;
 }
 
 const TokenSection: React.FC<TokenSectionProps> = ({
@@ -30,17 +29,9 @@ const TokenSection: React.FC<TokenSectionProps> = ({
   toAmount,
   isLoading,
 }) => {
+  const { sellingToken } = useTokenContext();
 
-  const {sellingToken} = useTokenContext()
-
-  useEffect(() => {}, [
-    token,
-    amount,
-    onAmountChange,
-    toAmount,
-    sellingToken,
-  ]);
-
+  useEffect(() => {}, [token, amount, onAmountChange, toAmount, sellingToken]);
 
   return (
     <div className={style.container}>
@@ -50,8 +41,8 @@ const TokenSection: React.FC<TokenSectionProps> = ({
           {/* <h4 className="text-sm text-blue-400">{ formatEther(data?.value!)??0}</h4> */}
         </div>
         <div className={style.selector}>
-          <TokenSelectorLink token={token} linkPath={linkPath} />
-          <TokenInput
+          <Selector token={token} linkPath={linkPath} />
+          <Input
             value={amount}
             onChange={onAmountChange!}
             placeholder={placeholder}
@@ -60,7 +51,7 @@ const TokenSection: React.FC<TokenSectionProps> = ({
             isLoading={isLoading}
           />
         </div>
-        <TokenInfo token={token} amount={amount} />
+        <Price token={token} amount={amount} />
       </div>
     </div>
   );

@@ -17,20 +17,17 @@ export const connectToMetamask = async (
       }
       await window.ethereum.request({ method: 'eth_requestAccounts' });
       const provider = new ethers.BrowserProvider(window.ethereum);
-      setWalletState({
-        provider,
-        loading: false,
-        error: null,
-        accountAddress: null,
-      });
 
-      const signer = await provider.getSigner();
-      const address = await signer.getAddress();
+      const signer = provider.getSigner();
+      const address = (await signer).address;
       setWalletState((prevState: WalletState) => ({
         ...prevState,
+        loading: false,
+        error: null,
         accountAddress: address,
       }));
       console.log('Connected user address:', address);
+      return signer;
     } catch (error) {
       console.error('Error connecting to MetaMask:', error);
       setWalletState((prevState: WalletState) => ({
@@ -38,6 +35,7 @@ export const connectToMetamask = async (
         loading: false,
         error: 'Failed to connect to MetaMask',
       }));
+      throw error;
     }
   } else {
     console.error('MetaMask is not installed');
@@ -46,5 +44,6 @@ export const connectToMetamask = async (
       loading: false,
       error: 'MetaMask is not installed',
     }));
+    return null;
   }
 };

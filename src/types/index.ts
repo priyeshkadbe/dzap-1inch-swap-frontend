@@ -34,7 +34,7 @@ export interface SwapResponse {
 }
 
 export interface WalletState {
-  provider: ethers.BrowserProvider | null;
+  signer: ethers.Signer | null;
   loading: boolean;
   error: null | string;
   accountAddress: null | string;

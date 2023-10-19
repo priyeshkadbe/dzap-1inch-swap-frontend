@@ -5,6 +5,7 @@ import axios from 'axios';
 import { route } from '@/api-routes/api-routes';
 import { Token } from '@/types';
 import formatNumber from '@/helper/format-number';
+import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 //import formatNumber from '@/utils/format-number';
 
 interface TokenInfoProps {
@@ -12,7 +13,7 @@ interface TokenInfoProps {
   amount: string;
 }
 
-const fetchTokenPrice = async (url: string): Promise<number> => {
+const Price = async (url: string): Promise<number> => {
   try {
     const response = await axios.get(url);
     const [address, price] = Object.entries(response.data.data)[0];
@@ -27,8 +28,8 @@ const TokenInfo: React.FC<TokenInfoProps> = ({ token, amount }) => {
   const [isLoadingNewData, setIsLoadingNewData] = useState<boolean>(false);
 
   const { data, isValidating } = useSWR(
-    token  ? `${route.fetchToken}${token.address!}` : null,
-    fetchTokenPrice,
+    token ? `${route.fetchToken}${token.address!}` : null,
+    useFetchTokenPrice,
     {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
@@ -43,7 +44,7 @@ const TokenInfo: React.FC<TokenInfoProps> = ({ token, amount }) => {
     if (!isValidating && isLoadingNewData) {
       setIsLoadingNewData(false);
     }
-  }, [isValidating, isLoadingNewData,amount]);
+  }, [isValidating, isLoadingNewData, amount]);
 
   const handleRefresh = () => {
     setIsLoadingNewData(true);
@@ -73,7 +74,7 @@ const TokenInfo: React.FC<TokenInfoProps> = ({ token, amount }) => {
           <div>
             <h4 className={`text-sm text-gray-500 capitalize `}>
               {'~$'}
-              {(Number(formatNumber(data.toString())) * Number(amount))}
+              {Number(formatNumber(data.toString())) * Number(amount)}
             </h4>
           </div>
         )}

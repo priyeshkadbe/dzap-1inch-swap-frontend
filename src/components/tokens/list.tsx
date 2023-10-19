@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { RotatingLines } from 'react-loader-spinner';
 import { Token } from '@/types';
-import TokenItem from './token-item';
+import TokenItem from './item';
 
-interface TokenListProps {
+interface ListProps {
   filteredTokens: Token[];
   handleTokenSelection: (token: Token) => void;
 }
 
-const TokenList: React.FC<TokenListProps> = ({
+const List: React.FC<ListProps> = ({
   filteredTokens,
   handleTokenSelection,
 }) => {
@@ -16,7 +16,7 @@ const TokenList: React.FC<TokenListProps> = ({
 
   useEffect(() => {
     if (filteredTokens && filteredTokens.length > 0) {
-      setLoading(false); 
+      setLoading(false);
     }
   }, [filteredTokens]);
 
@@ -46,4 +46,4 @@ const TokenList: React.FC<TokenListProps> = ({
   );
 };
 
-export default TokenList;
+export default List;

@@ -71,19 +71,19 @@ export const handleSwap = async ({
 
       const oneInchContract = await contractInteraction(
         serverConfig.CONTRACT_ADDRESS!,
-        walletState?.provider!,
+        walletState?.signer!,
         SmartContractABI.abi!,
       );
 
       if (
-        walletState.provider !== null &&
+        walletState.signer !== null &&
         sellingTokenAmount &&
         sellingToken?.decimals
       ) {
-        const signer = await walletState?.provider.getSigner();
+
 
         const contractWithSigner = oneInchContract?.contract?.connect(
-          signer,
+          walletState.signer,
         ) as any;
 
         const txHash = await contractWithSigner.swap(

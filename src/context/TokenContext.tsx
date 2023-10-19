@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import React, {
   createContext,
   ReactNode,
@@ -36,9 +36,9 @@ export const TokenProvider: React.FC<{ children: ReactNode }> = ({
   const [sellingToken, setSellingToken] = useState<Token | null>(null);
   const [buyingToken, setBuyingToken] = useState<Token | null>(null);
   const [tokens, setTokens] = useState<Token[] | null>(null);
-  const [sellingTokenAmount, setSellingTokenAmount] = useState<string>("0");
-  const [buyingTokenAmount, setBuyingTokenAmount] = useState<string>("0");
-  const [slippage, setSlippage] = useState<number>(2.5);
+  const [sellingTokenAmount, setSellingTokenAmount] = useState<string>('0');
+  const [buyingTokenAmount, setBuyingTokenAmount] = useState<string>('0');
+  const [slippage, setSlippage] = useState<number>(1.5);
 
   const fetchTokens = async () => {
     try {
@@ -59,8 +59,6 @@ export const TokenProvider: React.FC<{ children: ReactNode }> = ({
     if (data) {
       setTokens(data);
     }
-    
-    
   }, [data]);
 
   return (

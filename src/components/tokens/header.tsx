@@ -1,7 +1,6 @@
-import Link from "next/link";
-import React from "react";
-import { IoIosArrowBack } from "react-icons/io";
-
+import Link from 'next/link';
+import React from 'react';
+import { IoIosArrowBack } from 'react-icons/io';
 
 const Header: React.FC = () => {
   return (

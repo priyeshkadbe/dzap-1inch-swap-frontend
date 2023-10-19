@@ -1,6 +1,6 @@
 import toast from 'react-hot-toast';
 import { Token, WalletState } from '@/types';
-import { contractInteraction } from '@/utils/contract-interaction';
+import { contractInteraction } from '@/services/contract-interaction';
 import IERC20 from '../../abi/IERC20.json';
 import { convertAmountToWei } from '@/helper/convert-amount-to-wei';
 import { serverConfig } from '@/config/serverConfig';
@@ -49,15 +49,14 @@ export const handleAllowance = async ({
 
     const tokenContract = await contractInteraction(
       sellingTokenAddress,
-      walletState.provider!,
+      walletState.signer!,
       IERC20.abi,
     );
 
-    if (tokenContract && walletState.provider) {
-      const signer = await walletState?.provider.getSigner();
+    if (tokenContract && walletState.signer) {
 
       const contractWithSigner = (await tokenContract?.contract?.connect(
-        signer,
+        walletState.signer,
       )) as any;
 
       const txHash = await contractWithSigner?.approve(

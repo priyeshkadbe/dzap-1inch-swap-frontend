@@ -1,13 +1,14 @@
 import React, { useEffect } from "react";
 import { Token } from "@/types";
+import Image from "next/image";
 
-interface TokenItemProps {
+interface ItemProps {
   token: Token;
   index: number;
   handleTokenSelection: (token: Token) => void;
 }
 
-const TokenItem: React.FC<TokenItemProps> = ({
+const Item: React.FC<ItemProps> = ({
   token,
   index,
   handleTokenSelection,
@@ -32,4 +33,4 @@ const TokenItem: React.FC<TokenItemProps> = ({
   );
 };
 
-export default TokenItem;
+export default Item;

@@ -6,7 +6,7 @@ interface SearchInputProps {
   handleSearchChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const SearchInput: React.FC<SearchInputProps> = ({
+const Input: React.FC<SearchInputProps> = ({
   searchInput,
   handleSearchChange,
 }) => {
@@ -24,4 +24,4 @@ const SearchInput: React.FC<SearchInputProps> = ({
   );
 };
 
-export default SearchInput;
+export default Input;

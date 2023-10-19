@@ -8,32 +8,32 @@ import { useRouter } from 'next/navigation';
 import { Token } from '@/types';
 import { RotatingLines } from 'react-loader-spinner';
 import Image from 'next/image';
-import TokenItem from './token-item';
-import TokenList from './token-list';
-import SearchInput from './search-input';
+import TokenItem from './item';
+import TokenList from './list';
+import SearchInput from './input';
 import Header from './header';
 import Layout from './layout';
 import { route } from '@/api-routes/api-routes';
+import Input from './input';
 
 interface TokenSelectorProps {
   onSelectToken: (token: Token) => void;
 }
 
 const TokenSelector: React.FC<TokenSelectorProps> = ({ onSelectToken }) => {
-
   const { tokens } = useTokenContext();
-  
 
   const [searchInput, setSearchInput] = useState<string>('');
-  const [filteredTokens, setFilteredTokens] = useState<Token[]|null>([]);
+  const [filteredTokens, setFilteredTokens] = useState<Token[] | null>([]);
   const router = useRouter();
   useEffect(() => {
     setFilteredTokens(tokens);
   }, [tokens]);
 
-  useEffect(() => {}, [ tokens]);
+  useEffect(() => {}, [tokens]);
 
   const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
+    event.preventDefault();
     const { value } = event.target;
     setSearchInput(value);
     const filtered = tokens?.filter(
@@ -42,7 +42,7 @@ const TokenSelector: React.FC<TokenSelectorProps> = ({ onSelectToken }) => {
         token.symbol.toLowerCase().includes(value.toLowerCase()) ||
         token.address.toLowerCase().includes(value.toLowerCase()),
     );
-    setFilteredTokens(filtered??null);
+    setFilteredTokens(filtered ?? null);
   };
 
   const handleTokenSelection = (token: Token) => {
@@ -54,7 +54,7 @@ const TokenSelector: React.FC<TokenSelectorProps> = ({ onSelectToken }) => {
   return (
     <Layout>
       <Header />
-      <SearchInput
+      <Input
         searchInput={searchInput}
         handleSearchChange={handleSearchChange}
       />

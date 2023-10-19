@@ -1,17 +1,17 @@
 import React, { useEffect } from 'react';
 import Layout from './layout';
-import Header from './header';
-import TokenSection from './token-section';
-import SwitchTokens from './switch-tokens';
-import GasFeeInfo from './gas-fee-info';
-import SwapButton from './swap-button';
+import Header from '@/components/header';
+import TokenSection from "@/components/token-section/index"
+import SwitchTokens from "@/components/switch-tokens";
+
+import SwapButton from "@/components/swap-button";
 import { useTokenContext } from '@/context/TokenContext';
 import { useFetchQuote } from '@/hooks/useFetchQuote';
 import { ethers } from 'ethers';
 import formatNumber from '@/helper/format-number';
 import { toast } from 'react-hot-toast';
 import { convertAmountToWei } from '@/helper/convert-amount-to-wei';
-
+import GasFee from '../gas-fees';
 
 export default function Swap() {
   const {
@@ -31,10 +31,9 @@ export default function Swap() {
       : null,
   );
 
-
   useEffect(() => {
     if (data && buyingToken) {
-      let decimals = Number(`1E${buyingToken.decimals}`)
+      let decimals = Number(`1E${buyingToken.decimals}`);
       setBuyingTokenAmount((Number(data.toAmount) / decimals).toString());
     }
   }, [
@@ -46,8 +45,6 @@ export default function Swap() {
     setBuyingTokenAmount,
   ]);
 
-
-  
   return (
     <Layout>
       <Header />
@@ -79,10 +76,11 @@ export default function Swap() {
         />
       </div>
       {/* Gas and Fee Info */}
-      <GasFeeInfo
+
+      <GasFee
         loading={isLoading}
         error={error!}
-        gas={ethers.formatEther(data?.gas.toString()!??0).toString()}
+        gas={ethers.formatEther(data?.gas.toString()! ?? 0).toString()}
         toAmount={buyingTokenAmount!}
         sellingTokenSymbol={sellingToken?.symbol}
         sellingTokenAmount={sellingTokenAmount}

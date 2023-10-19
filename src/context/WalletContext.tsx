@@ -7,7 +7,7 @@ import React, {
   Dispatch,
   SetStateAction,
 } from 'react';
-import { ethers } from 'ethers';
+import { ethers, Signer } from 'ethers'; // Import Signer from ethers
 import { WalletState } from '@/types';
 
 interface WalletContextProps {
@@ -23,11 +23,10 @@ interface WalletProviderProps {
 
 export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
   const [walletState, setWalletState] = useState<WalletState>({
-    provider: null,
+    signer: null,
     loading: false,
     error: null,
     accountAddress: null,
-    
   });
 
   return (

@@ -1,24 +1,20 @@
-import React from "react";
-import Link  from "next/link";
+import React from 'react';
+import Link from 'next/link';
+import { AiOutlineDown } from 'react-icons/ai';
+import { style } from './styles';
+import Image from 'next/image';
 
-import { AiOutlineDown } from "react-icons/ai";
-import { style } from "./style";
-
-interface TokenSelectorLinkProps {
-  token: {
-    logoURI: string;
-    symbol: string;
-  } | null;
-  linkPath: string;
+interface Token {
+  logoURI: string;
+  symbol: string;
 }
 
+interface SelectorProps {
+  token: Token | null;
+  linkPath: string; // Add linkPath directly to the props
+}
 
-
-
-const TokenSelectorLink: React.FC<TokenSelectorLinkProps> = ({
-  token,
-  linkPath,
-}) => {
+const Selector: React.FC<SelectorProps> = ({ token, linkPath }) => {
   return (
     <Link href={linkPath}>
       {token ? (
@@ -39,4 +35,4 @@ const TokenSelectorLink: React.FC<TokenSelectorLinkProps> = ({
   );
 };
 
-export default TokenSelectorLink;
+export default Selector;
