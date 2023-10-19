@@ -99,25 +99,31 @@ const Swap: React.FC = () => {
     slippage,
   } = useTokenContext();
 
+  useEffect(() => {
+    console.log('walletState', walletState);
+  }, [walletState, loading]);
   const handleConnectClick = async (
     event: React.MouseEvent<HTMLButtonElement>,
   ) => {
     event.preventDefault();
-    await connectToMetamask(walletState, setWalletState);
+    await connectToMetamask(walletState, setWalletState, setLoading);
   };
 
   const handleSwapClick = async (
     event: React.MouseEvent<HTMLButtonElement>,
   ) => {
     event.preventDefault();
+    
+
     setSwapLoading(true);
+
     try {
       await handleSwap({
         walletState,
         setLoading,
-        sellingTokenAddress: sellingToken?.address,
-        sellingTokenAmount: sellingTokenAmount,
-        buyingTokenAddress: buyingToken?.address,
+        sellingTokenAddress: sellingToken?.address!,
+        sellingTokenAmount: sellingTokenAmount!,
+        buyingTokenAddress: buyingToken?.address!,
         slippage: slippage,
         sellingToken,
       });
@@ -133,6 +139,7 @@ const Swap: React.FC = () => {
     event: React.MouseEvent<HTMLButtonElement>,
   ) => {
     event.preventDefault();
+    console.log('clicked');
     setLoading(true);
     try {
       await handleAllowance({
@@ -188,7 +195,9 @@ const Swap: React.FC = () => {
         <button
           className={style.button}
           onClick={
-            walletState.signer ? handleAllowanceClick : handleConnectClick
+            walletState.signer !== null
+              ? handleAllowanceClick
+              : handleConnectClick
           }
           disabled={loading || swapLoading}
         >

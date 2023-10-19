@@ -34,6 +34,7 @@ export const handleAllowance = async ({
       return;
     }
     setLoading(true);
+
     const response = await axios.get(route.allowance, {
       params: {
         tokenAddress: sellingTokenAddress,
@@ -41,7 +42,7 @@ export const handleAllowance = async ({
       },
     });
 
-    if (response?.data.allowance === '0') {
+    if (!response || response.data.allowance === '0') {
       setLoading(false);
       toast.error('Allowance not found');
       return;
@@ -54,22 +55,34 @@ export const handleAllowance = async ({
     );
 
     if (tokenContract && walletState.signer) {
-
-      const contractWithSigner = (await tokenContract?.contract?.connect(
+      const contractWithSigner = (await tokenContract.contract?.connect(
         walletState.signer,
       )) as any;
 
-      const txHash = await contractWithSigner?.approve(
+      if (!contractWithSigner) {
+        setLoading(false);
+        toast.error('Failed to connect to the token contract with signer.');
+        return;
+      }
+
+      const txHash = await contractWithSigner.approve(
         serverConfig.CONTRACT_ADDRESS,
         convertAmountToWei(sellingTokenAmount, sellingToken.decimals),
       );
 
-      await txHash?.wait();
-      await toast.success('Transaction successful');
-      setAllowanceSuccessful(true);
-      console.log('Transaction Hash:', txHash?.hash);
+      if (txHash) {
+        await txHash.wait();
+        await toast.success('Transaction successful');
+        setAllowanceSuccessful(true);
+        console.log('Transaction Hash:', txHash.hash);
+      } else {
+        setLoading(false);
+        toast.error('Transaction failed');
+      }
+    } else {
+      setLoading(false);
+      toast.error('Token contract or signer not available.');
     }
-    setLoading(false);
   } catch (error) {
     setLoading(false);
     console.error('Error occurred while checking allowance:', error);
