@@ -1,5 +1,5 @@
 import { Token } from '@/types';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { AiOutlineDown } from 'react-icons/ai';
 import { style } from './styles';
 import Image from 'next/image';
@@ -13,6 +13,8 @@ interface SelectedProps {
 }
 
 const Selected: React.FC<SelectedProps> = ({ token }) => {
+
+  useEffect(()=>{},[token])
   return (
     <div className={style.selectorDropdown}>
       {token ? (

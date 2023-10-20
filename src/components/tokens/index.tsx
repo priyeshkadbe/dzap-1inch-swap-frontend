@@ -13,7 +13,7 @@ import TokenList from './list';
 import SearchInput from './input';
 import Header from './header';
 import Layout from './layout';
-import { route } from '@/api-routes/api-routes';
+import { route } from '@/config/api-routes';
 import Input from './input';
 
 interface TokenSelectorProps {

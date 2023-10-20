@@ -4,7 +4,7 @@ import { contractInteraction } from '@/services/contract-interaction';
 import IERC20 from '../../abi/IERC20.json';
 import { convertAmountToWei } from '@/helper/convert-amount-to-wei';
 import { serverConfig } from '@/config/serverConfig';
-import { route } from '@/api-routes/api-routes';
+import { route } from '@/config/api-routes';
 import axios from 'axios';
 
 interface AllowanceHandlerProps {

@@ -3,20 +3,20 @@ import { SwapResponse } from '@/types/index';
 import { convertAmountToWei } from '@/helper/convert-amount-to-wei';
 import { Token, WalletState } from '@/types';
 import axios from 'axios';
-import { route } from '@/api-routes/api-routes';
+import { route } from '@/config/api-routes';
 import { ethers } from 'ethers';
 import SmartContractABI from '../../abi/swap.json';
 import { contractInteraction } from './contract-interaction';
 import { serverConfig } from '@/config/serverConfig';
 
 interface SwapHandlerProps {
-  walletState: WalletState | null;
+  walletState?: WalletState;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
-  sellingTokenAddress: string;
-  sellingTokenAmount: string;
-  buyingTokenAddress: string;
-  slippage: number;
-  sellingToken: Token | null;
+  sellingTokenAddress?: string;
+  sellingTokenAmount?: string;
+  buyingTokenAddress?: string;
+  slippage?: number;
+  sellingToken?: Token;
 }
 
 export const handleSwap = async ({
@@ -29,7 +29,7 @@ export const handleSwap = async ({
   sellingToken,
 }: SwapHandlerProps): Promise<void> => {
   try {
-    if (!walletState || !walletState.signer || !sellingToken) {
+    if (!walletState?.signer || !sellingToken) {
       toast.error('Please connect to MetaMask');
       return;
     }
@@ -39,14 +39,14 @@ export const handleSwap = async ({
 
     const response = await axios.get(route.swap, {
       params: {
-        tokenIn: sellingTokenAddress,
-        tokenOut: buyingTokenAddress,
+        tokenIn: sellingTokenAddress ?? '',
+        tokenOut: buyingTokenAddress ?? '',
         tokenInAmount: convertAmountToWei(
-          sellingTokenAmount,
-          sellingToken?.decimals!,
+          sellingTokenAmount ?? '0',
+          sellingToken?.decimals ?? 18,
         ),
-        callerAddress: walletState?.accountAddress!,
-        slippage: slippage,
+        callerAddress: walletState?.accountAddress ?? '',
+        slippage: slippage ?? 1.5,
       },
     });
 
@@ -54,46 +54,56 @@ export const handleSwap = async ({
     if (response.data.error) {
       console.log('error');
       setLoading(false);
-      toast.error('Unable to fetch swap details. Please try again.');
+      toast.error('Unable to fetch swap details. Please try again.tx');
       return;
     }
 
-   
-    const  oneInchInterface = new ethers.Interface(
-      SmartContractABI.abi)
-    const swapFunctionParameters= oneInchInterface.decodeFunctionData('swap',response.data.data.tx.data).toString()
-    console.log('swapFunctionParameters', swapFunctionParameters);
+    const interfaceResponse = new ethers.Interface(SmartContractABI.abi)
+      .decodeFunctionData('swap', response.data.data.tx.data)
+      .toObject();
 
+    const desc = Object.values(interfaceResponse.desc);
 
-    if (
-      walletState.signer &&
-      sellingTokenAmount &&
-      sellingToken?.decimals &&
-      serverConfig.CONTRACT_ADDRESS
-    ) {
-      const oneInchContract = await contractInteraction(
-        serverConfig.CONTRACT_ADDRESS,
-        walletState.signer,
-        SmartContractABI.abi,
-      );
+    console.log(
+      'final sending data',
+      interfaceResponse.executor,
+      desc,
+      interfaceResponse.permit,
+      interfaceResponse.data,
 
-      const contractWithSigner = oneInchContract?.contract?.connect(
-        walletState.signer,
-      ) as any;
+      {
+        value: convertAmountToWei(sellingTokenAmount ?? '0', sellingToken?.decimals ?? 18),
+      },
+    );
 
-      const txHash = await contractWithSigner.swap(
-        sellingToken.address,
+    const oneInchContract = await contractInteraction(
+      serverConfig.CONTRACT_ADDRESS ?? '',
+      walletState.signer,
+      SmartContractABI.abi,
+    );
 
-        {
-          value: convertAmountToWei(sellingTokenAmount, sellingToken?.decimals),
-        },
-      );
-
-      await txHash.wait();
-      toast.success('Transaction successful');
+    if (!oneInchContract?.contract) {
+      setLoading(false);
+      toast.error('Contract not available');
+      return;
     }
 
-    setLoading(false);
+    const contractWithSigner = oneInchContract.contract.connect(
+      walletState.signer,
+    ) as any;
+
+    const txHash = await contractWithSigner.swap(
+      interfaceResponse.executor,
+      desc,
+      interfaceResponse.permit,
+      interfaceResponse.data,
+      {
+        value: convertAmountToWei(sellingTokenAmount ?? '0', sellingToken?.decimals ?? 18),
+      },
+    );
+
+    await txHash.wait();
+    toast.success('Transaction successful');
   } catch (error) {
     setLoading(false);
     console.error('Error occurred while swapping:', error);

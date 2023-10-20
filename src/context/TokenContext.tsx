@@ -12,7 +12,7 @@ import React, {
 import axios from 'axios';
 import useSWR from 'swr';
 import { Token } from '@/types';
-import { route } from '@/api-routes/api-routes';
+import { route } from '@/config/api-routes';
 import { serverConfig } from '@/config/serverConfig';
 
 interface TokenContextProps {
@@ -45,7 +45,25 @@ export const TokenProvider: React.FC<{ children: ReactNode }> = ({
       const response = await axios.get(route.fetchToken);
       const tokenData = response.data.data.tokens;
       const tokenArray: Token[] = Object.values(tokenData);
+      console.log(
+        'token array',
+        tokenArray.find(
+          (token: Token) => token.address == serverConfig.USDT_TOKEN_ADDRESS,
+        ),
+      );
+
       setTokens(tokenArray);
+
+      setSellingToken(
+        tokenArray.find(
+          (token: Token) => token.address == serverConfig.MATIC_TOKEN_ADDRESS,
+        ) ?? null,
+      );
+      setBuyingToken(
+        tokenArray.find(
+          (token: Token) => token.address == serverConfig.USDT_TOKEN_ADDRESS,
+        ) ?? null,
+      );
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -57,9 +75,11 @@ export const TokenProvider: React.FC<{ children: ReactNode }> = ({
 
   useEffect(() => {
     if (data) {
+
       setTokens(data);
     }
   }, [data]);
+
 
   return (
     <TokenContext.Provider

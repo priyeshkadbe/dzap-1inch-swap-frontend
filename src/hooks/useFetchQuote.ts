@@ -1,4 +1,4 @@
-import { route } from '@/api-routes/api-routes';
+import { route } from '@/config/api-routes';
 import { Token } from '@/types';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
@@ -30,16 +30,14 @@ export const useFetchQuote = (
     buyingToken !== null &&
     buyingToken !== undefined &&
     sellingTokenAmount !== null &&
-    sellingTokenAmount !== undefined 
+    sellingTokenAmount !== undefined;
 
   const url = shouldFetchData
-    ? `${
-        route.getQuote
-      }?tokenIn=${sellingToken?.address}&tokenOut=${buyingToken?.address}&tokenInAmount=${sellingTokenAmount}`
+    ? `${route.getQuote}?tokenIn=${sellingToken?.address}&tokenOut=${buyingToken?.address}&tokenInAmount=${sellingTokenAmount}`
     : null;
 
   const { data, error } = useSWR<FetchQuoteResponse>(url, fetcher, {
-    revalidateOnFocus: true, 
+    revalidateOnFocus: true,
     refreshInterval: 5000,
   });
 
@@ -58,7 +56,7 @@ export const useFetchQuote = (
       mounted = false;
       clearTimeout(delay);
     };
-  }, []); 
+  }, []);
 
   return { data, isLoading, error };
 };

@@ -25,30 +25,28 @@ const Swap: React.FC = () => {
   useEffect(() => {
     console.log('walletState', walletState);
   }, [walletState, loading]);
-  const handleConnectClick = async (
-    event: React.MouseEvent<HTMLButtonElement>,
-  ) => {
-    event.preventDefault();
+
+  const handleConnectClick = async () => {
     await connectToMetamask(walletState, setWalletState, setLoading);
   };
 
-  const handleSwapClick = async (
-    event: React.MouseEvent<HTMLButtonElement>,
-  ) => {
-    event.preventDefault();
-
+  const handleSwapClick = async () => {
     setSwapLoading(true);
 
     try {
-      await handleSwap({
-        walletState,
-        setLoading,
-        sellingTokenAddress: sellingToken?.address!,
-        sellingTokenAmount: sellingTokenAmount!,
-        buyingTokenAddress: buyingToken?.address!,
-        slippage: slippage,
-        sellingToken,
-      });
+      if (sellingToken && buyingToken && sellingTokenAmount) {
+        await handleSwap({
+          walletState: walletState!,
+          setLoading,
+          sellingTokenAddress: sellingToken.address,
+          sellingTokenAmount,
+          buyingTokenAddress: buyingToken.address,
+          slippage,
+          sellingToken,
+        });
+      } else {
+        throw new Error('Invalid token or amount data');
+      }
     } catch (error) {
       console.error('Error occurred while swapping:', error);
       toast.error('Failed to swap');
@@ -57,22 +55,22 @@ const Swap: React.FC = () => {
     }
   };
 
-  const handleAllowanceClick = async (
-    event: React.MouseEvent<HTMLButtonElement>,
-  ) => {
-    event.preventDefault();
-    console.log('clicked');
+  const handleAllowanceClick = async () => {
     setLoading(true);
     try {
-      await handleAllowance({
-        walletState,
-        setLoading,
-        sellingTokenAddress: sellingToken?.address,
-        accountAddress: walletState?.accountAddress,
-        sellingTokenAmount,
-        sellingToken: sellingToken!,
-        setAllowanceSuccessful,
-      });
+      if (sellingToken && sellingTokenAmount) {
+        await handleAllowance({
+          walletState: walletState!,
+          setLoading,
+          sellingTokenAddress: sellingToken.address,
+          accountAddress: walletState?.accountAddress,
+          sellingTokenAmount,
+          sellingToken,
+          setAllowanceSuccessful,
+        });
+      } else {
+        throw new Error('Invalid token or amount data');
+      }
     } catch (error) {
       console.error('Error occurred while setting allowance:', error);
       toast.error('Failed to set allowance');

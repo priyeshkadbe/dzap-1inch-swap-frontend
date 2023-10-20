@@ -33,7 +33,7 @@ const Input: React.FC<InputProps> = ({
     <input
       type="number"
       placeholder={placeholder}
-      className="bg-transparent w-full text-xl text-end outline-none"
+      className={`bg-transparent w-full text-xl text-end outline-none ${disabled&&"text-gray-500"}`}
       value={disabled ? Number(toAmount) : Number(value)}
       onChange={handleChange}
       disabled={disabled}

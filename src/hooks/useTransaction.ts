@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { route } from '@/api-routes/api-routes';
+import { route } from '@/config/api-routes';
 import { Token } from '@/types';
 
 interface TransactionResponse {
@@ -50,8 +50,6 @@ const useTransaction = (
     };
 
     fetchTransactionData();
-
-  
   }, [tokenAddress, sellingTokenAmount]);
 
   return { loading, error, transactionData };

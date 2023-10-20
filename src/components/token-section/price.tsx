@@ -2,11 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { ThreeDots } from 'react-loader-spinner';
 import useSWR, { mutate } from 'swr';
 import axios from 'axios';
-import { route } from '@/api-routes/api-routes';
+import { route } from '@/config/api-routes';
 import { Token } from '@/types';
 import formatNumber from '@/helper/format-number';
-import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
-//import formatNumber from '@/utils/format-number';
 
 interface TokenInfoProps {
   token: Token | null;
@@ -29,7 +27,7 @@ const TokenInfo: React.FC<TokenInfoProps> = ({ token, amount }) => {
 
   const { data, isValidating } = useSWR(
     token ? `${route.fetchToken}${token.address!}` : null,
-    useFetchTokenPrice,
+    Price,
     {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
