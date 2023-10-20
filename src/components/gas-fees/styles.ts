@@ -1,4 +1,4 @@
-export const style = {
+export const styles = {
   wrapper: `w-screen flex items-center justify-center mt-2 md:mt-14`,
   content: `flex relative gap-y-2 flex-col bg-[#191B1F] w-screen mx-2 md:mx-0 md:w-[30rem] rounded-2xl p-6`,
   formHeader: `px-2 flex items-center justify-between font-semibold text-xl`,

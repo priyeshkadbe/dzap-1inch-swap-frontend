@@ -11,7 +11,7 @@ interface Token {
 
 interface SelectorProps {
   token: Token | null;
-  linkPath: string; // Add linkPath directly to the props
+  linkPath: string; 
 }
 
 const Selector: React.FC<SelectorProps> = ({ token, linkPath }) => {

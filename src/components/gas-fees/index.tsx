@@ -39,10 +39,8 @@ const GasFee: React.FC<GasFeeProps> = ({
 
   return (
     <div className="bg-gray-800 rounded-xl my-4 p-3 flex flex-col justify-between items-center text-sm text-gray-600">
-      {/* Gas Price Info */}
       {gas && <GasPrice gas={gas} />}
 
-      {/* Token Exchange Rate */}
       {calculatedPrice && (
         <ExchangeRate
           calculatedPrice={calculatedPrice}

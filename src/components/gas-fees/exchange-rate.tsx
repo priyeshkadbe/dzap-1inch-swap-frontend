@@ -10,7 +10,6 @@ const ExchangeRate: React.FC<ExchangeRateProps> = ({
   buyingTokenSymbol,
 }) => (
   <div className="flex items-center justify-center gap-x-4 text-sm text-gray-600">
-    {/* You can add an icon for the exchange rate if needed */}
     <p className="text-sm">{`1 ${buyingTokenSymbol} = ${calculatedPrice} MATIC`}</p>
   </div>
 );
