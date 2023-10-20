@@ -45,25 +45,7 @@ export const TokenProvider: React.FC<{ children: ReactNode }> = ({
       const response = await axios.get(route.fetchToken);
       const tokenData = response.data.data.tokens;
       const tokenArray: Token[] = Object.values(tokenData);
-      console.log(
-        'token array',
-        tokenArray.find(
-          (token: Token) => token.address == serverConfig.USDT_TOKEN_ADDRESS,
-        ),
-      );
-
-      setTokens(tokenArray);
-
-      setSellingToken(
-        tokenArray.find(
-          (token: Token) => token.address == serverConfig.MATIC_TOKEN_ADDRESS,
-        ) ?? null,
-      );
-      setBuyingToken(
-        tokenArray.find(
-          (token: Token) => token.address == serverConfig.USDT_TOKEN_ADDRESS,
-        ) ?? null,
-      );
+      return tokenArray
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -75,7 +57,6 @@ export const TokenProvider: React.FC<{ children: ReactNode }> = ({
 
   useEffect(() => {
     if (data) {
-
       setTokens(data);
     }
   }, [data]);
